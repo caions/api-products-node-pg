@@ -10,19 +10,8 @@ class Product {
     this.preco = preco;
   }
 
-  getAll(result, error) {
+  getAll(result) {
     let selectQuery = "SELECT * FROM PRODUCTS";
-    pool.query(selectQuery, (err, rows) => {
-      if (err) {
-        error(err);
-        return;
-      }
-      result(rows);
-    });
-  }
-
-  getOne(id, result) {
-    let selectQuery = `SELECT * FROM PRODCTS WHERE ID = ${id}`;
     pool.query(selectQuery, (err, rows) => {
       if (err) {
         result(err);
@@ -32,39 +21,50 @@ class Product {
     });
   }
 
-  create(nome, preco, result, error) {
-    let insertQuery = `insert into products(nome,preco) values('${nome}',${preco})`;
-    pool.query(insertQuery, (err, rows) => {
+  getOne(id, result) {
+    let selectQuery = `SELECT * FROM PRODUCTS WHERE ID = ${id}`;
+    pool.query(selectQuery, (err, rows) => {
       if (err) {
-        error(err);
+        result(err);
         return;
       }
       result(rows);
     });
   }
 
-  update(request, result, error) {
+  create(nome, preco, result) {
+    let insertQuery = `insert into products(nome,preco) values('${nome}',${preco})`;
+    pool.query(insertQuery, (err, rows) => {
+      if (err) {
+        result(err);
+        return;
+      }
+      result(rows);
+    });
+  }
+
+  update(request, result) {
     let { nome, preco, id } = request;
     let queryUpdate = `UPDATE products SET nome='${nome}', preco=${preco} WHERE id=${id}`;
 
     pool.query(queryUpdate, (err, rows) => {
       if (err) {
-        error(err);
+        result(err);
         return;
       }
-      result();
+      result(rows);
     });
   }
 
-  delete(request, result, error) {
+  delete(request, result) {
     let { id } = request;
     let queryDrop = `DELETE FROM products WHERE id = ${id};`;
-    pool.query(queryDrop, (err, rows) => {
+    pool.query(queryDrop, (err, data) => {
       if (err) {
-        error(err);
+        result(err);
         return;
       }
-      result();
+      result(data);
     });
   }
 }

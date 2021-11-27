@@ -1,15 +1,16 @@
 const product = require("../model/product.model");
 
 class Product {
-  getAll(req, res) {
-    const result = ({ rows }) => {
-      res.status(200).json(rows);
+  getAll(_, res) {
+    const result = (data) => {
+      let { rows } = data;
+      if (rows) {
+        res.status(200).json(rows);
+        return;
+      }
+      res.status(404).json(data);
     };
-    const error = (erro) => {
-      console.log(erro);
-      res.status(404).json(erro);
-    };
-    product.getAll(result, error);
+    product.getAll(result);
   }
 
   getOne(req, res) {
@@ -18,50 +19,55 @@ class Product {
       let { rows } = data;
       if (rows) {
         res.status(200).json(rows);
-      } else {
-        res.status(404).json(data);
+        return;
       }
+      res.status(404).json(data);
     });
   }
 
   create(req, res) {
     let { nome, preco } = req.body;
-    const result = ({ rows }) => {
-      res.status(200).json(rows);
+    const result = (data) => {
+      let { rows } = data;
+      if (rows) {
+        res.status(200).json(rows);
+        return;
+      }
+      res.status(404).json(data);
     };
-    const error = (erro) => {
-      console.log(erro);
-      res.status(404).json(erro);
-    };
-    product.create(nome, preco, result, error);
+
+    product.create(nome, preco, result);
   }
 
   update(req, res) {
     let { nome, preco } = req.body;
     let { id } = req.params;
     let request = { id, nome, preco };
-    const result = () => {
-      res.status(200).json();
+    const result = (data) => {
+      let { rows } = data;
+      if (rows) {
+        res.status(200).json(req.body);
+        return;
+      }
+      res.status(404).json(data);
     };
-    const error = (erro) => {
-      console.log(erro);
-      res.status(404).json(erro);
-    };
-    product.update(request, result, error);
+
+    product.update(request, result);
   }
 
   delete(req, res) {
     let { id } = req.params;
     let request = { id };
 
-    product.delete(
-      request,
-      () => res.json(),
-      (e) => {
-        console.log(e);
-        res.status(404).json(e);
+    const result = (data) => {
+      if (data) {
+        res.json();
+        return;
       }
-    );
+      res.status(404).json(data);
+    };
+
+    product.delete(request, result);
   }
 }
 
