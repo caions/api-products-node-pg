@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const routeProduct = require("./routes/product");
 const PORT = 3000;
-require("./dbConnection");
+require("./model/dbConnection");
 
 app.use(express.json());
 // app.use(express.urlencoded({ extended: false }));
