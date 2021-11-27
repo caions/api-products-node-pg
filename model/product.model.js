@@ -12,34 +12,34 @@ class Product {
 
   getAll(result) {
     let selectQuery = "SELECT * FROM PRODUCTS";
-    pool.query(selectQuery, (err, rows) => {
+    pool.query(selectQuery, (err, data) => {
       if (err) {
         result(err);
         return;
       }
-      result(rows);
+      result(data);
     });
   }
 
   getOne(id, result) {
     let selectQuery = `SELECT * FROM PRODUCTS WHERE ID = ${id}`;
-    pool.query(selectQuery, (err, rows) => {
+    pool.query(selectQuery, (err, data) => {
       if (err) {
         result(err);
         return;
       }
-      result(rows);
+      result(data);
     });
   }
 
   create(nome, preco, result) {
     let insertQuery = `insert into products(nome,preco) values('${nome}',${preco})`;
-    pool.query(insertQuery, (err, rows) => {
+    pool.query(insertQuery, (err, data) => {
       if (err) {
         result(err);
         return;
       }
-      result(rows);
+      result(data);
     });
   }
 
@@ -47,12 +47,12 @@ class Product {
     let { nome, preco, id } = request;
     let queryUpdate = `UPDATE products SET nome='${nome}', preco=${preco} WHERE id=${id}`;
 
-    pool.query(queryUpdate, (err, rows) => {
+    pool.query(queryUpdate, (err, data) => {
       if (err) {
         result(err);
         return;
       }
-      result(rows);
+      result(data);
     });
   }
 
