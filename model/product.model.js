@@ -6,63 +6,58 @@ class ProductModel {
     this.preco = preco;
   }
 
-  filter(result) {
+  async filter() {
     let selectQuery = "SELECT * FROM PRODUCTS";
-    pool.query(selectQuery, (err, data) => {
-      if (err) {
-        result(err);
-        return;
-      }
-      result(data);
-    });
+    try {
+      const result = await pool.query(selectQuery);
+      return result;
+    } catch (err) {
+      console.log(err.stack);
+    }
   }
 
-  findById(id, result) {
+  async findById(id, result) {
     let selectQuery = `SELECT * FROM PRODUCTS WHERE ID = ${id}`;
-    pool.query(selectQuery, (err, data) => {
-      if (err) {
-        result(err);
-        return;
-      }
-      result(data);
-    });
+    try {
+      const result = await pool.query(selectQuery);
+      return result;
+    } catch (err) {
+      console.log(err.stack);
+    }
   }
 
-  create(product, result) {
+  async create(product) {
     let { nome, preco } = product;
     let insertQuery = `insert into products(nome,preco) values('${nome}',${preco})`;
-    pool.query(insertQuery, (err, data) => {
-      if (err) {
-        result(err);
-        return;
-      }
-      result(data);
-    });
+    try {
+      const result = await pool.query(insertQuery);
+      return result;
+    } catch (err) {
+      console.log(err.stack);
+    }
   }
 
-  save(product, result) {
+  async save(product, result) {
     let { nome, preco, id } = product;
     let queryUpdate = `UPDATE products SET nome='${nome}', preco=${preco} WHERE id=${id}`;
 
-    pool.query(queryUpdate, (err, data) => {
-      if (err) {
-        result(err);
-        return;
-      }
-      result(data);
-    });
+    try {
+      const result = await pool.query(queryUpdate);
+      return result;
+    } catch (err) {
+      console.log(err.stack);
+    }
   }
 
-  deleteById(id, result) {
-
+  async deleteById(id) {
     let queryDrop = `DELETE FROM products WHERE id = ${id};`;
-    pool.query(queryDrop, (err, data) => {
-      if (err) {
-        result(err);
-        return;
-      }
-      result(data);
-    });
+
+    try {
+      const result = await pool.query(queryDrop);
+      return result;
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 

@@ -1,71 +1,61 @@
 const ProductModel = require("../model/product.model");
 
 class Product {
-  index(_, res) {
-    let product = new ProductModel();
-
-    product.filter((data) => {
-      let { rows } = data;
-      if (rows) {
-        res.status(200).json(rows);
-        return;
-      }
-      res.status(404).json(data);
-    });
+  async index(_, res) {
+    let productModel = new ProductModel();
+    let product = await productModel.filter();
+    if (product) {
+      res.json(product.rows);
+    } else {
+      res.status(404).json();
+    }
   }
 
-  show(req, res) {
+  async show(req, res) {
     let { id } = req.params;
-    let product = new ProductModel();
-    product.findById(id, (data) => {
-      let { rows } = data;
-      if (rows) {
-        res.status(200).json(rows);
-        return;
-      }
-      res.status(404).json(data);
-    });
+    let productModel = new ProductModel();
+    let product = await productModel.findById(id);
+    if (product) {
+      res.json(product.rows);
+    } else {
+      res.status(404).json();
+    }
   }
 
-  create(req, res) {
+  async create(req, res) {
     let { nome, preco } = req.body;
 
-    let product = new ProductModel(nome, preco);
-    product.create(product, (data) => {
-      let { rows } = data;
-      if (rows) {
-        res.status(200).json(rows);
-        return;
-      }
-      res.status(404).json(data);
-    });
+    let productModel = new ProductModel(nome, preco);
+    const product = await productModel.create(productModel);
+    if (product) {
+      res.json(req.body);
+    } else {
+      res.status(404).json();
+    }
   }
 
-  update(req, res) {
+  async update(req, res) {
     let { nome, preco } = req.body;
     let { id } = req.params;
 
-    let product = new ProductModel(nome, preco);
-    product.save({ id, ...product }, (data) => {
-      let { rows } = data;
-      if (rows) {
-        res.status(200).json(req.body);
-        return;
-      }
-      res.status(404).json(data);
-    });
+    let productModel = new ProductModel(nome, preco);
+    let product = await productModel.save({ id, ...productModel });
+    if (product) {
+      res.json({ id, ...productModel });
+    } else {
+      res.status(404).json();
+    }
   }
 
-  destroy(req, res) {
+  async destroy(req, res) {
     let { id } = req.params;
-    let product = new ProductModel();
-    product.deleteById(id, (data) => {
-      if (data) {
-        res.json();
-        return;
-      }
-      res.status(404).json(data);
-    });
+    let productModel = new ProductModel();
+    const product = await productModel.deleteById(id);
+    if (product) {
+      res.json();
+    } else {
+      res.status(404).json();
+    }
   }
 }
 
