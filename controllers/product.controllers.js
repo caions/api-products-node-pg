@@ -15,7 +15,8 @@ class Product {
     let { id } = req.params;
     let productModel = new ProductModel();
     let product = await productModel.findById(id);
-    if (product) {
+
+    if (product.rowCount != 0) {
       res.json(product.rows);
     } else {
       res.status(404).json();
@@ -25,10 +26,23 @@ class Product {
   async create(req, res) {
     let { nome, preco } = req.body;
 
+    if (!nome || !preco) {
+      res.status(400).json();
+      return;
+    }
     let productModel = new ProductModel(nome, preco);
+    console.log(productModel)
+
+    let checkProductExist = await productModel.findByName(nome);
+
+    if (checkProductExist.rowCount != 0) {
+      res.status(400).json("Esse produto já foi cadastrado");
+      return;
+    }
+
     const product = await productModel.create(productModel);
     if (product) {
-      res.json(req.body);
+      res.json(productModel);
     } else {
       res.status(404).json();
     }
@@ -39,9 +53,15 @@ class Product {
     let { id } = req.params;
 
     let productModel = new ProductModel(nome, preco);
-    let product = await productModel.save({ id, ...productModel });
-    if (product) {
-      res.json({ id, ...productModel });
+    let { rows } = await productModel.findById(id);
+
+    if (rows != "") {
+      let product = await productModel.save(rows[0]);
+      if (product) {
+        res.json({ id, ...productModel });
+      } else {
+        res.status(404).json();
+      }
     } else {
       res.status(404).json();
     }
@@ -50,9 +70,14 @@ class Product {
   async destroy(req, res) {
     let { id } = req.params;
     let productModel = new ProductModel();
-    const product = await productModel.deleteById(id);
-    if (product) {
-      res.json();
+    let { rows } = await productModel.findById(id);
+    if (rows != "") {
+      const product = await productModel.deleteById(id);
+      if (product) {
+        res.json();
+      } else {
+        res.status(404).json();
+      }
     } else {
       res.status(404).json();
     }

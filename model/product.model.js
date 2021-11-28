@@ -4,10 +4,12 @@ class ProductModel {
   constructor(nome, preco) {
     this.nome = nome;
     this.preco = preco;
+    this.createAt = new Date().toISOString();
+    this.updatedAt = new Date().toISOString();
   }
 
   async filter() {
-    let selectQuery = "SELECT * FROM PRODUCTS";
+    let selectQuery = "SELECT * FROM PRODUCTS ORDER BY ID";
     try {
       const result = await pool.query(selectQuery);
       return result;
@@ -26,9 +28,19 @@ class ProductModel {
     }
   }
 
+  async findByName(name) {
+    let selectQuery = `SELECT * FROM PRODUCTS WHERE NOME = '${name}'`;
+    try {
+      const result = await pool.query(selectQuery);
+      return result;
+    } catch (err) {
+      console.log(err.stack);
+    }
+  }
+
   async create(product) {
     let { nome, preco } = product;
-    let insertQuery = `insert into products(nome,preco) values('${nome}',${preco})`;
+    let insertQuery = `INSERT INTO products(nome,preco,created_at,updated_at) VALUES('${nome}',${preco},'${this.createAt}','${this.updatedAt}')`;
     try {
       const result = await pool.query(insertQuery);
       return result;
@@ -39,10 +51,10 @@ class ProductModel {
 
   async save(product) {
     let { nome, preco, id } = product;
-    let queryUpdate = `UPDATE products SET nome='${nome}', preco=${preco} WHERE id=${id}`;
+    let updateQuery = `UPDATE products SET nome='${nome}', preco=${preco},updated_at='${this.updatedAt}' WHERE id=${id}`;
 
     try {
-      const result = await pool.query(queryUpdate);
+      const result = await pool.query(updateQuery);
       return result;
     } catch (err) {
       console.log(err.stack);
@@ -50,10 +62,10 @@ class ProductModel {
   }
 
   async deleteById(id) {
-    let queryDrop = `DELETE FROM products WHERE id = ${id};`;
+    let dropQuery = `DELETE FROM products WHERE id = ${id};`;
 
     try {
-      const result = await pool.query(queryDrop);
+      const result = await pool.query(dropQuery);
       return result;
     } catch (err) {
       console.log(err);
