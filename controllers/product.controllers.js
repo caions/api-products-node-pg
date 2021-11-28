@@ -1,21 +1,23 @@
-const product = require("../model/product.model");
+const ProductModel = require("../model/product.model");
 
 class Product {
-  getAll(_, res) {
-    const result = (data) => {
+  index(_, res) {
+    let product = new ProductModel();
+
+    product.filter((data) => {
       let { rows } = data;
       if (rows) {
         res.status(200).json(rows);
         return;
       }
       res.status(404).json(data);
-    };
-    product.getAll(result);
+    });
   }
 
-  getOne(req, res) {
+  show(req, res) {
     let { id } = req.params;
-    product.getOne(id, (data) => {
+    let product = new ProductModel();
+    product.findById(id, (data) => {
       let { rows } = data;
       if (rows) {
         res.status(200).json(rows);
@@ -27,47 +29,43 @@ class Product {
 
   create(req, res) {
     let { nome, preco } = req.body;
-    const result = (data) => {
+
+    let product = new ProductModel(nome, preco);
+    product.create(product, (data) => {
       let { rows } = data;
       if (rows) {
         res.status(200).json(rows);
         return;
       }
       res.status(404).json(data);
-    };
-
-    product.create(nome, preco, result);
+    });
   }
 
   update(req, res) {
     let { nome, preco } = req.body;
     let { id } = req.params;
-    let request = { id, nome, preco };
-    const result = (data) => {
+
+    let product = new ProductModel(nome, preco);
+    product.save({ id, ...product }, (data) => {
       let { rows } = data;
       if (rows) {
         res.status(200).json(req.body);
         return;
       }
       res.status(404).json(data);
-    };
-
-    product.update(request, result);
+    });
   }
 
-  delete(req, res) {
+  destroy(req, res) {
     let { id } = req.params;
-    let request = { id };
-
-    const result = (data) => {
+    let product = new ProductModel();
+    product.deleteById(id, (data) => {
       if (data) {
         res.json();
         return;
       }
       res.status(404).json(data);
-    };
-
-    product.delete(request, result);
+    });
   }
 }
 
