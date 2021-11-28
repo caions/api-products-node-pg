@@ -16,7 +16,7 @@ class ProductModel {
     }
   }
 
-  async findById(id, result) {
+  async findById(id) {
     let selectQuery = `SELECT * FROM PRODUCTS WHERE ID = ${id}`;
     try {
       const result = await pool.query(selectQuery);
@@ -37,7 +37,7 @@ class ProductModel {
     }
   }
 
-  async save(product, result) {
+  async save(product) {
     let { nome, preco, id } = product;
     let queryUpdate = `UPDATE products SET nome='${nome}', preco=${preco} WHERE id=${id}`;
 
