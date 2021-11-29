@@ -13,6 +13,12 @@ class Product {
 
   async show(req, res) {
     let { id } = req.params;
+
+    if (isNaN(id)) {
+      res.status(400).json();
+      return;
+    }
+
     let productModel = new ProductModel();
     let product = await productModel.findById(id);
 
@@ -31,7 +37,6 @@ class Product {
       return;
     }
     let productModel = new ProductModel(nome, preco);
-    console.log(productModel)
 
     let checkProductExist = await productModel.findByName(nome);
 
@@ -52,11 +57,16 @@ class Product {
     let { nome, preco } = req.body;
     let { id } = req.params;
 
+    if (isNaN(id)) {
+      res.status(400).json();
+      return;
+    }
+
     let productModel = new ProductModel(nome, preco);
     let { rows } = await productModel.findById(id);
 
     if (rows != "") {
-      let product = await productModel.save(rows[0]);
+      let product = await productModel.save({ id, ...productModel });
       if (product) {
         res.json({ id, ...productModel });
       } else {
@@ -69,6 +79,12 @@ class Product {
 
   async destroy(req, res) {
     let { id } = req.params;
+
+    if (isNaN(id)) {
+      res.status(400).json();
+      return;
+    }
+
     let productModel = new ProductModel();
     let { rows } = await productModel.findById(id);
     if (rows != "") {
