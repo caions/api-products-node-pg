@@ -1,17 +1,16 @@
-const pool = require("../model/dbConnection");
+const Product = require("../model/dbConnection");
 
 class ProductModel {
   constructor(nome, preco) {
     this.nome = nome;
     this.preco = preco;
-    this.createAt = new Date().toISOString();
-    this.updatedAt = new Date().toISOString();
+    this.created_at = new Date().toISOString();
+    this.updated_at = new Date().toISOString();
   }
 
   async filter() {
-    let selectQuery = "SELECT * FROM PRODUCTS ORDER BY ID";
     try {
-      const result = await pool.query(selectQuery);
+      let result = await Product.findAll({ order: ["id"] });
       return result;
     } catch (err) {
       console.log(err.stack);
@@ -19,9 +18,8 @@ class ProductModel {
   }
 
   async findById(id) {
-    let selectQuery = `SELECT * FROM PRODUCTS WHERE ID = ${id}`;
     try {
-      const result = await pool.query(selectQuery);
+      const result = await Product.findByPk(id);
       return result;
     } catch (err) {
       console.log(err.stack);
@@ -29,9 +27,8 @@ class ProductModel {
   }
 
   async findByName(name) {
-    let selectQuery = `SELECT * FROM PRODUCTS WHERE NOME = '${name}'`;
     try {
-      const result = await pool.query(selectQuery);
+      const result = await Product.findOne({ where: { nome: name } });
       return result;
     } catch (err) {
       console.log(err.stack);
@@ -40,9 +37,8 @@ class ProductModel {
 
   async create(product) {
     let { nome, preco } = product;
-    let insertQuery = `INSERT INTO products(nome,preco,created_at,updated_at) VALUES('${nome}',${preco},'${this.createAt}','${this.updatedAt}')`;
     try {
-      const result = await pool.query(insertQuery);
+      const result = await Product.create({ nome, preco });
       return result;
     } catch (err) {
       console.log(err.stack);
@@ -51,10 +47,8 @@ class ProductModel {
 
   async save(product) {
     let { nome, preco, id } = product;
-    let updateQuery = `UPDATE products SET nome='${nome}', preco=${preco},updated_at='${this.updatedAt}' WHERE id=${id}`;
-
     try {
-      const result = await pool.query(updateQuery);
+      const result = await Product.update({ nome, preco }, { where: { id } });
       return result;
     } catch (err) {
       console.log(err.stack);
@@ -62,10 +56,8 @@ class ProductModel {
   }
 
   async deleteById(id) {
-    let dropQuery = `DELETE FROM products WHERE id = ${id};`;
-
     try {
-      const result = await pool.query(dropQuery);
+      const result = await Product.destroy({ where: { id } });
       return result;
     } catch (err) {
       console.log(err);

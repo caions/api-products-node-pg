@@ -5,7 +5,7 @@ class Product {
     let productModel = new ProductModel();
     let product = await productModel.filter();
     if (product) {
-      res.json(product.rows);
+      res.json(product);
     } else {
       res.status(404).json();
     }
@@ -22,8 +22,8 @@ class Product {
     let productModel = new ProductModel();
     let product = await productModel.findById(id);
 
-    if (product.rowCount != 0) {
-      res.json(product.rows);
+    if (product != null) {
+      res.json(product);
     } else {
       res.status(404).json();
     }
@@ -40,7 +40,7 @@ class Product {
 
     let checkProductExist = await productModel.findByName(nome);
 
-    if (checkProductExist.rowCount != 0) {
+    if (checkProductExist != null) {
       res.status(400).json("Esse produto já foi cadastrado");
       return;
     }
@@ -63,9 +63,9 @@ class Product {
     }
 
     let productModel = new ProductModel(nome, preco);
-    let { rows } = await productModel.findById(id);
+    let findedProduct = await productModel.findById(id);
 
-    if (rows != "") {
+    if (findedProduct != null) {
       let product = await productModel.save({ id, ...productModel });
       if (product) {
         res.json({ id, ...productModel });
@@ -86,8 +86,8 @@ class Product {
     }
 
     let productModel = new ProductModel();
-    let { rows } = await productModel.findById(id);
-    if (rows != "") {
+    let findedProduct = await productModel.findById(id);
+    if (findedProduct != null) {
       const product = await productModel.deleteById(id);
       if (product) {
         res.json();

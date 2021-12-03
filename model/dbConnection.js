@@ -1,17 +1,32 @@
-const { Pool } = require("pg");
+const { Sequelize, DataTypes } = require("sequelize");
 
-const pool = new Pool({
-  user: "postgres",
+const sequelize = new Sequelize({
   database: "praticar",
+  username: "postgres",
   password: "postgres",
-  port: 5432,
+  dialect: "postgres",
   host: "localhost",
+  logging: false,
 });
 
-pool.connect((err) => {
-  if (err) {
-    console.log("Erro ao conectar no banco");
+const Product = sequelize.define(
+  "products",
+  {
+    nome: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    preco: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    created_at: DataTypes.DATE,
+    updated_at: DataTypes.DATE,
+  },
+  {
+    createdAt: "created_at",
+    updatedAt: "updated_at",
   }
-});
+);
 
-module.exports = pool;
+module.exports = Product;
