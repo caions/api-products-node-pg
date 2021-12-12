@@ -2,14 +2,13 @@ require("express-async-errors");
 require("./model/dbConnection");
 const express = require("express");
 const app = express();
-const routeProduct = require("./routes/product.routes");
-const routeUser = require("./routes/user.routes");
+const routes = require("./routes/index");
 const handlerError = require("./utils/handleError");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use("/products", routeProduct);
-app.use('/users',routeUser)
+
+app.use(routes)
 
 // handler errors of aplication
 app.use(handlerError);
