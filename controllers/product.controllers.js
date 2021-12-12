@@ -39,9 +39,9 @@ class Product {
 
     let productModel = new ProductModel(nome, preco);
 
-    let checkProductExist = await productModel.findByName(nome);
+    let checkProductExists = await productModel.findByName(nome);
 
-    if (checkProductExist != null) {
+    if (checkProductExists != null) {
       throw new ApiError(400, "Esse produto já foi cadastrado");
     }
 
@@ -62,9 +62,9 @@ class Product {
     }
 
     let productModel = new ProductModel(nome, preco);
-    let foundProduct = await productModel.findById(id);
+    let checkProductExists = await productModel.findById(id);
 
-    if (foundProduct != null) {
+    if (checkProductExists != null) {
       let product = await productModel.save({ id, ...productModel });
       if (product) {
         res.json({ id, ...productModel });
@@ -84,8 +84,8 @@ class Product {
     }
 
     let productModel = new ProductModel();
-    let foundProduct = await productModel.findById(id);
-    if (foundProduct != null) {
+    let checkProductExists = await productModel.findById(id);
+    if (checkProductExists != null) {
       const product = await productModel.deleteById(id);
       if (product) {
         res.json();
