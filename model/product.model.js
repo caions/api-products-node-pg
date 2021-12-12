@@ -1,11 +1,23 @@
-const Product = require("../model/dbConnection");
+const { DataTypes } = require("sequelize");
+const sequelize = require("./dbConnection");
+
+const Product = sequelize.define("products", {
+  nome: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  preco: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
+});
 
 class ProductModel {
   constructor(nome, preco) {
     this.nome = nome;
     this.preco = preco;
-    this.created_at = new Date().toISOString();
-    this.updated_at = new Date().toISOString();
+    this.created_at;
+    this.updated_at;
   }
 
   async filter() {

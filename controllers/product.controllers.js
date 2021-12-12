@@ -1,5 +1,5 @@
 const ProductModel = require("../model/product.model");
-const ApiError = require('../utils/apiError')
+const ApiError = require("../utils/apiError");
 
 class Product {
   async index(_, res) {
@@ -9,15 +9,15 @@ class Product {
     if (product) {
       res.json(product);
     } else {
-      throw new ApiError(404,"produto não encontrado")
+      throw new ApiError(404, "produto não encontrado");
     }
   }
 
-  async show(req, res,next) {
+  async show(req, res, next) {
     let { id } = req.params;
 
     if (isNaN(id)) {
-      throw new ApiError(400,"Informe o id do produto")
+      throw new ApiError(400, "Informe o id do produto");
     }
 
     let productModel = new ProductModel();
@@ -26,7 +26,7 @@ class Product {
     if (product != null) {
       res.json(product);
     } else {
-      throw new ApiError(404,"produto não encontrado")
+      throw new ApiError(404, "produto não encontrado");
     }
   }
 
@@ -34,21 +34,22 @@ class Product {
     let { nome, preco } = req.body;
 
     if (!nome || !preco) {
-      throw new ApiError(400,"Informe o nome e preco do produto")
+      throw new ApiError(400, "Informe o nome e preco do produto");
     }
+
     let productModel = new ProductModel(nome, preco);
 
     let checkProductExist = await productModel.findByName(nome);
 
     if (checkProductExist != null) {
-      throw new ApiError(400,"Esse produto já foi cadastrado")
+      throw new ApiError(400, "Esse produto já foi cadastrado");
     }
 
     const product = await productModel.create(productModel);
     if (product) {
-      res.json(productModel);
+      res.json(product);
     } else {
-      throw new ApiError(404,"produto não encontrado")
+      throw new ApiError(404, "produto não encontrado");
     }
   }
 
@@ -57,7 +58,7 @@ class Product {
     let { id } = req.params;
 
     if (isNaN(id)) {
-      throw new ApiError(400,"Informe o id do produto")
+      throw new ApiError(400, "Informe o id do produto");
     }
 
     let productModel = new ProductModel(nome, preco);
@@ -68,10 +69,10 @@ class Product {
       if (product) {
         res.json({ id, ...productModel });
       } else {
-        throw new ApiError(404,"produto não encontrado")
+        throw new ApiError(404, "produto não encontrado");
       }
     } else {
-      throw new ApiError(404,"produto não encontrado")
+      throw new ApiError(404, "produto não encontrado");
     }
   }
 
@@ -79,7 +80,7 @@ class Product {
     let { id } = req.params;
 
     if (isNaN(id)) {
-      throw new ApiError(400,"Informe o id do produto")
+      throw new ApiError(400, "Informe o id do produto");
     }
 
     let productModel = new ProductModel();
@@ -89,10 +90,10 @@ class Product {
       if (product) {
         res.json();
       } else {
-        throw new ApiError(404,"produto não encontrado")
+        throw new ApiError(404, "produto não encontrado");
       }
     } else {
-      throw new ApiError(404,"produto não encontrado")
+      throw new ApiError(404, "produto não encontrado");
     }
   }
 }
