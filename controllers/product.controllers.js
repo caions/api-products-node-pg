@@ -13,7 +13,7 @@ class Product {
     }
   }
 
-  async show(req, res, next) {
+  async show(req, res) {
     let { id } = req.params;
 
     if (isNaN(id)) {
