@@ -1,4 +1,4 @@
-const { Sequelize } = require("sequelize");
+const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = new Sequelize({
   database: "postgres",
@@ -9,6 +9,32 @@ const sequelize = new Sequelize({
   logging: false,
 });
 
+const Product = sequelize.define("products", {
+  nome: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  preco: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
+});
+
+const User = sequelize.define("users", {
+  nome: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  idade: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+
+// one to many relationship
+User.hasMany(Product);
+Product.belongsTo(User);
+
 sequelize.sync();
 
-module.exports = sequelize;
+module.exports = { sequelize, User, Product };

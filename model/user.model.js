@@ -1,16 +1,4 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("./dbConnection");
-
-const User = sequelize.define("users", {
-  nome: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  idade: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-});
+const { User, Product } = require("../model/dbConnection");
 
 class UserModel {
   constructor(nome, idade) {
@@ -22,7 +10,7 @@ class UserModel {
 
   async filter() {
     try {
-      let result = await User.findAll({ order: ["id"] });
+      let result = await User.findAll({ order: ["id"], include: Product }); // include products
       return result;
     } catch (err) {
       console.log(err.stack);
@@ -31,7 +19,7 @@ class UserModel {
 
   async findById(id) {
     try {
-      const result = await User.findByPk(id);
+      const result = await User.findByPk(id, { include: Product }); // include products
       return result;
     } catch (err) {
       console.log(err.stack);
