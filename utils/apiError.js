@@ -1,7 +1,5 @@
 class ApiError {
-  statusCode = 400;
-  message;
-  constructor(statusCode, message) {
+  constructor(statusCode = 500, message) {
     this.statusCode = statusCode;
     this.message = message;
   }
