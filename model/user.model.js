@@ -60,7 +60,7 @@ class UserModel {
       const result = await User.destroy({ where: { id } });
       return result;
     } catch (err) {
-      console.log(err);
+      console.log(err.stack);
     }
   }
 }

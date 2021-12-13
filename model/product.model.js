@@ -64,7 +64,7 @@ class ProductModel {
       const result = await Product.destroy({ where: { id } });
       return result;
     } catch (err) {
-      console.log(err);
+      console.log(err.stack);
     }
   }
 }

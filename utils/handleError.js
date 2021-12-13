@@ -1,6 +1,6 @@
 const apiError = require("./apiError");
 
-const handlerError = (err, req, res) => {
+const handlerError = (err, req, res, next) => {
   if (err instanceof apiError) {
     return res.status(err.statusCode).json({
       status: "error",

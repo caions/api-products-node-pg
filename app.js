@@ -1,5 +1,4 @@
 require("express-async-errors");
-require("./model/dbConnection");
 const express = require("express");
 const app = express();
 const routes = require("./routes/index");
@@ -8,7 +7,7 @@ const handlerError = require("./utils/handleError");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(routes)
+app.use(routes);
 
 // handler errors of aplication
 app.use(handlerError);
