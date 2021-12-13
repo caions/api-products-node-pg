@@ -14,6 +14,7 @@ class ProductModel {
       return result;
     } catch (err) {
       console.log(err.stack);
+      throw new Error();
     }
   }
 
@@ -23,6 +24,7 @@ class ProductModel {
       return result;
     } catch (err) {
       console.log(err.stack);
+      throw new Error();
     }
   }
 
@@ -32,6 +34,7 @@ class ProductModel {
       return result;
     } catch (err) {
       console.log(err.stack);
+      throw new Error();
     }
   }
 
@@ -42,6 +45,7 @@ class ProductModel {
       return result;
     } catch (err) {
       console.log(err.stack);
+      throw new Error();
     }
   }
 
@@ -52,6 +56,7 @@ class ProductModel {
       return result;
     } catch (err) {
       console.log(err.stack);
+      throw new Error();
     }
   }
 
@@ -61,6 +66,7 @@ class ProductModel {
       return result;
     } catch (err) {
       console.log(err.stack);
+      throw new Error();
     }
   }
 }

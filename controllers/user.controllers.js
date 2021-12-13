@@ -7,28 +7,20 @@ class User {
     let userModel = new UserModel();
     let user = await userModel.filter();
 
-    if (user) {
-      res.json(user);
-    } else {
-      throw new ApiError(404, "usuário não encontrado");
-    }
+    res.json(user);
   }
 
   async show(req, res) {
     let { id } = req.params;
 
-    if (isNaN(id)) {
-      throw new ApiError(400, "Informe o id do usuário");
-    }
-
     let userModel = new UserModel();
     let user = await userModel.findById(id);
 
-    if (user != null) {
-      res.json(user);
-    } else {
+    if (!user) {
       throw new ApiError(404, "usuário não encontrado");
     }
+
+    res.json(user);
   }
 
   async create(req, res) {
@@ -41,61 +33,48 @@ class User {
     let userModel = new UserModel(nome, idade);
 
     let checkUserExists = await userModel.findByName(nome);
-
-    if (checkUserExists != null) {
-      throw new ApiError(400, "Esse usuário já foi cadastrado");
+    if (checkUserExists) {
+      throw new ApiError(400, "Esse nome de usuário está indisponível");
     }
 
     const user = await userModel.create(userModel);
-    if (user) {
-      res.json(user);
-    } else {
-      throw new ApiError(404, "usuário não encontrado");
-    }
+
+    res.json(user);
   }
 
   async update(req, res) {
     let { nome, idade } = req.body;
     let { id } = req.params;
 
-    if (isNaN(id)) {
-      throw new ApiError(400, "Informe o id do usuário");
-    }
-
     let userModel = new UserModel(nome, idade);
-    let checkUserExists = await userModel.findById(id);
 
-    if (checkUserExists != null) {
-      let user = await userModel.save({ id, ...userModel });
-      if (user) {
-        res.json({ id, ...userModel });
-      } else {
-        throw new ApiError(404, "usuário não encontrado");
-      }
-    } else {
+    let checkUserExists = await userModel.findById(id);
+    if (!checkUserExists) {
       throw new ApiError(404, "usuário não encontrado");
     }
+
+    let checkUserNameAlreadyExists = await userModel.findByName(nome);
+    if (checkUserNameAlreadyExists) {
+      throw new ApiError(400, "Esse nome de usuário está indisponível");
+    }
+
+    await userModel.save({ id, ...userModel });
+
+    res.json({ id, ...userModel });
   }
 
   async destroy(req, res) {
     let { id } = req.params;
 
-    if (isNaN(id)) {
-      throw new ApiError(400, "Informe o id do usuário");
-    }
-
     let userModel = new UserModel();
+
     let checkUserExists = await userModel.findById(id);
-    if (checkUserExists != null) {
-      const user = await userModel.deleteById(id);
-      if (user) {
-        res.json();
-      } else {
-        throw new ApiError(404, "usuário não encontrado");
-      }
-    } else {
+    if (!checkUserExists) {
       throw new ApiError(404, "usuário não encontrado");
     }
+
+    await userModel.deleteById(id);
+    res.json();
   }
 
   async addProduct(req, res) {
@@ -105,7 +84,6 @@ class User {
     let productModel = new ProductModel();
 
     let checkUserExists = await userModel.findById(userId);
-
     if (!checkUserExists) {
       throw new ApiError(404, "usuário não encontrado");
     }
