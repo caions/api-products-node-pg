@@ -1,10 +1,9 @@
 const { Product, User } = require("../model/dbConnection");
 
 class ProductModel {
-  constructor(nome, preco, userId) {
+  constructor(nome, preco) {
     this.nome = nome;
     this.preco = preco;
-    this.userId = userId;
     this.created_at;
     this.updated_at;
   }
@@ -37,9 +36,9 @@ class ProductModel {
   }
 
   async create(product) {
-    let { nome, preco, userId } = product;
+    let { nome, preco } = product;
     try {
-      const result = await Product.create({ nome, preco, userId });
+      const result = await Product.create({ nome, preco });
       return result;
     } catch (err) {
       console.log(err.stack);
@@ -47,12 +46,9 @@ class ProductModel {
   }
 
   async save(product) {
-    let { nome, preco, id, userId } = product;
+    let { nome, preco, id } = product;
     try {
-      const result = await Product.update(
-        { nome, preco, userId },
-        { where: { id } }
-      );
+      const result = await Product.update({ nome, preco }, { where: { id } });
       return result;
     } catch (err) {
       console.log(err.stack);

@@ -32,8 +32,12 @@ const User = sequelize.define("users", {
 });
 
 // one to many relationship
-User.hasMany(Product);
-Product.belongsTo(User);
+//User.hasMany(Product);
+//Product.belongsTo(User);
+
+// many to many relationship
+User.belongsToMany(Product, { through: "UserProducts" });
+Product.belongsToMany(User, { through: "UserProducts" });
 
 sequelize.sync();
 

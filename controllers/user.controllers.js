@@ -1,8 +1,9 @@
 const UserModel = require("../model/user.model");
+const ProductModel = require("../model/product.model");
 const ApiError = require("../utils/apiError");
 
 class User {
-  async index(_, res) {
+  async index(req, res) {
     let userModel = new UserModel();
     let user = await userModel.filter();
 
@@ -95,6 +96,27 @@ class User {
     } else {
       throw new ApiError(404, "usuário não encontrado");
     }
+  }
+
+  async addProduct(req, res) {
+    const { userId, productId } = req.body;
+
+    let userModel = new UserModel();
+    let productModel = new ProductModel();
+
+    let checkUserExists = await userModel.findById(userId);
+
+    if (!checkUserExists) {
+      throw new ApiError(404, "usuário não encontrado");
+    }
+
+    const checkProductExists = await productModel.findById(productId);
+    if (!checkProductExists) {
+      throw new ApiError(404, "produto não encontrado");
+    }
+
+    const result = await userModel.addProduct(userId, productId);
+    res.json(result);
   }
 }
 

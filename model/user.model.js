@@ -63,6 +63,17 @@ class UserModel {
       console.log(err.stack);
     }
   }
+
+  async addProduct(userId, productId) {
+    try {
+      const user = await User.findByPk(userId);
+      const product = await Product.findByPk(productId);
+      const result = await user.addProduct(product);
+      return result;
+    } catch (err) {
+      console.log(err.stack);
+    }
+  }
 }
 
 module.exports = UserModel;

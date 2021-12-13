@@ -2,7 +2,7 @@ const ProductModel = require("../model/product.model");
 const ApiError = require("../utils/apiError");
 
 class Product {
-  async index(_, res) {
+  async index(req, res) {
     let productModel = new ProductModel();
     let product = await productModel.filter();
 
@@ -31,13 +31,13 @@ class Product {
   }
 
   async create(req, res) {
-    let { nome, preco, userId } = req.body;
+    let { nome, preco } = req.body;
 
     if (!nome || !preco) {
       throw new ApiError(400, "Informe o nome e preco do produto");
     }
 
-    let productModel = new ProductModel(nome, preco, userId);
+    let productModel = new ProductModel(nome, preco);
 
     let checkProductExists = await productModel.findByName(nome);
 
@@ -54,14 +54,14 @@ class Product {
   }
 
   async update(req, res) {
-    let { nome, preco, userId } = req.body;
+    let { nome, preco } = req.body;
     let { id } = req.params;
 
     if (isNaN(id)) {
       throw new ApiError(400, "Informe o id do produto");
     }
 
-    let productModel = new ProductModel(nome, preco, userId);
+    let productModel = new ProductModel(nome, preco);
     let checkProductExists = await productModel.findById(id);
 
     if (checkProductExists != null) {
