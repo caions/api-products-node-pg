@@ -97,6 +97,18 @@ class UserModel {
       throw new Error();
     }
   }
+
+  async removeProduct(userId, productId) {
+    try {
+      const user = await User.findByPk(userId);
+      const product = await Product.findByPk(productId);
+      const result = await user.removeProduct(product);
+      return result;
+    } catch (err) {
+      console.log(err.stack);
+      throw new Error();
+    }
+  }
 }
 
 module.exports = UserModel;

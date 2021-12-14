@@ -96,6 +96,26 @@ class User {
     const result = await userModel.addProduct(userId, productId);
     res.json(result);
   }
+
+  async removeProduct(req, res) {
+    const { userId, productId } = req.body;
+
+    let userModel = new UserModel();
+    let productModel = new ProductModel();
+
+    let checkUserExists = await userModel.findById(userId);
+    if (!checkUserExists) {
+      throw new ApiError(404, "usuário não encontrado");
+    }
+
+    const checkProductExists = await productModel.findById(productId);
+    if (!checkProductExists) {
+      throw new ApiError(404, "produto não encontrado");
+    }
+
+    const result = await userModel.removeProduct(userId, productId);
+    res.json(result);
+  }
 }
 
 let userController = new User();

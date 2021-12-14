@@ -6,6 +6,7 @@ route.get("/", userController.index);
 route.get("/:id", userController.show);
 route.post("/", userController.create);
 route.post("/add", userController.addProduct);
+route.post("/del", userController.removeProduct);
 route.put("/:id", userController.update);
 route.delete("/:id", userController.destroy);
 
