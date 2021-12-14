@@ -10,7 +10,15 @@ class UserModel {
 
   async filter() {
     try {
-      let result = await User.findAll({ order: ["id"], include: Product }); // include products
+      let result = await User.findAll({
+        order: [["id", "ASC"]],
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+        include: {
+          model: Product,
+          attributes: ["id", "nome", "preco"],
+          through: { attributes: [] },
+        },
+      }); // include products
       return result;
     } catch (err) {
       console.log(err.stack);
@@ -20,7 +28,15 @@ class UserModel {
 
   async findById(id) {
     try {
-      const result = await User.findByPk(id, { include: Product }); // include products
+      const result = await User.findByPk(id, {
+        order: [["id", "ASC"]],
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+        include: {
+          model: Product,
+          attributes: ["id", "nome", "preco"],
+          through: { attributes: [] },
+        },
+      }); // include products
       return result;
     } catch (err) {
       console.log(err.stack);
