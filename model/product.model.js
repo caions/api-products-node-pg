@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const { Product, User } = require("../model/dbConnection");
 
 class ProductModel {
@@ -8,9 +9,24 @@ class ProductModel {
     this.updated_at;
   }
 
-  async filter() {
+  async filter({ nome, preco }) {
+    let options = {};
+
+    if (nome) {
+      options.nome = {
+        [Op.like]: `%${nome}%`,
+      };
+    }
+
+    if (preco) {
+      options.preco = preco;
+    }
     try {
-      let result = await Product.findAll({ order: ["id"], include: User }); // include user
+      let result = await Product.findAll({
+        where: options,
+        order: ["id"],
+        include: User,
+      }); // include user
       return result;
     } catch (err) {
       console.log(err.stack);

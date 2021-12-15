@@ -3,8 +3,19 @@ const ApiError = require("../utils/apiError");
 
 class Product {
   async index(req, res) {
+    let { nome, preco } = req.query;
+    let filter = {};
+
+    if (nome) {
+      filter.nome = nome;
+    }
+
+    if (!isNaN(preco)) {
+      filter.preco = preco;
+    }
+
     let productModel = new ProductModel();
-    let product = await productModel.filter();
+    let product = await productModel.filter(filter);
 
     res.json(product);
   }

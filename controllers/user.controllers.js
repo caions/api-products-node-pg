@@ -4,8 +4,19 @@ const ApiError = require("../utils/apiError");
 
 class User {
   async index(req, res) {
+    let { nome, idade } = req.query;
+    let filter = {};
+
+    if (nome) {
+      filter.nome = nome;
+    }
+
+    if (!isNaN(idade)) {
+      filter.idade = idade;
+    }
+
     let userModel = new UserModel();
-    let user = await userModel.filter();
+    let user = await userModel.filter(filter);
 
     res.json(user);
   }

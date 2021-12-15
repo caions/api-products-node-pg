@@ -1,5 +1,5 @@
+const { Op } = require("sequelize");
 const { User, Product } = require("../model/dbConnection");
-
 class UserModel {
   constructor(nome, idade) {
     this.nome = nome;
@@ -8,9 +8,22 @@ class UserModel {
     this.updated_at;
   }
 
-  async filter() {
+  async filter({ nome, idade }) {
+    let options = {};
+
+    if (nome) {
+      options.nome = {
+        [Op.like]: `%${nome}%`,
+      };
+    }
+
+    if (idade) {
+      options.idade = idade;
+    }
+
     try {
       let result = await User.findAll({
+        where: options,
         order: [["id", "ASC"]],
         attributes: { exclude: ["createdAt", "updatedAt"] },
         include: {
