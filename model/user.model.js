@@ -15,13 +15,12 @@ class UserModel {
         attributes: { exclude: ["createdAt", "updatedAt"] },
         include: {
           model: Product,
-          attributes: ["id", "nome", "preco"],
           through: { attributes: [] },
         },
       }); // include products
       return result;
     } catch (err) {
-      console.log(err.stack);
+      console.log({ sql: err.sql, message: err.message });
       throw new Error();
     }
   }
@@ -39,7 +38,7 @@ class UserModel {
       }); // include products
       return result;
     } catch (err) {
-      console.log(err.stack);
+      console.log({ sql: err.sql, message: err.message });
       throw new Error();
     }
   }
