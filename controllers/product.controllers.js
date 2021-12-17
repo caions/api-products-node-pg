@@ -1,7 +1,16 @@
 const ProductModel = require("../model/product.model");
 const ApiError = require("../utils/apiError");
+const jwt = require("jsonwebtoken");
 
 class Product {
+  async auth(req, res) {
+    const id = 1; //esse id viria do banco de dados
+    var token = jwt.sign({ id }, "token-secreto", {
+      expiresIn: 300, // expires in 5min
+    });
+    res.status(200).send({ auth: true, token: token });
+  }
+
   async index(req, res) {
     let { nome, preco } = req.query;
     let filter = {};
