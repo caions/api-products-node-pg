@@ -1,10 +1,15 @@
 const jwt = require("jsonwebtoken");
 const ApiError = require("./apiError");
+
 const verifyJWT = (req, res, next) => {
-  var token = req.headers["x-access-token"];
-  if (!token) {
+  const headers = req.headers["authorization"];
+
+  if (!headers) {
     throw new ApiError(401, "No token provided.");
   }
+
+  const bearer = headers.split(" ");
+  const token = bearer[1];
 
   jwt.verify(token, "token-secreto", (err, decoded) => {
     if (err) {
