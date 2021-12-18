@@ -1,14 +1,15 @@
 const { Op } = require("sequelize");
 const { User, Product } = require("../model/dbConnection");
 class UserModel {
-  constructor(nome, idade) {
+  constructor(nome, email, password) {
     this.nome = nome;
-    this.idade = idade;
+    this.email = email;
+    this.password = password;
     this.created_at;
     this.updated_at;
   }
 
-  async filter({ nome, idade }) {
+  async filter({ nome, email, password }) {
     let options = {};
 
     if (nome) {
@@ -17,15 +18,19 @@ class UserModel {
       };
     }
 
-    if (idade) {
-      options.idade = idade;
+    if (email) {
+      options.email = email;
+    }
+
+    if (password) {
+      options.password = password;
     }
 
     try {
       let result = await User.findAll({
         where: options,
         order: [["id", "ASC"]],
-        attributes: { exclude: ["createdAt", "updatedAt"] },
+        attributes: { exclude: ["password", "createdAt", "updatedAt"] },
         include: {
           model: Product,
           through: { attributes: [] },
@@ -42,7 +47,7 @@ class UserModel {
     try {
       const result = await User.findByPk(id, {
         order: [["id", "ASC"]],
-        attributes: { exclude: ["createdAt", "updatedAt"] },
+        attributes: { exclude: ["password", "createdAt", "updatedAt"] },
         include: {
           model: Product,
           attributes: ["id", "nome", "preco"],
@@ -52,6 +57,16 @@ class UserModel {
       return result;
     } catch (err) {
       console.log({ sql: err.sql, message: err.message });
+      throw new Error();
+    }
+  }
+
+  async findByEmail(email) {
+    try {
+      const result = await User.findOne({ where: { email } });
+      return result;
+    } catch (err) {
+      console.log(err.stack);
       throw new Error();
     }
   }
@@ -67,9 +82,9 @@ class UserModel {
   }
 
   async create(user) {
-    let { nome, idade } = user;
+    let { nome, email, password } = user;
     try {
-      const result = await User.create({ nome, idade });
+      const result = await User.create({ nome, email, password });
       return result;
     } catch (err) {
       console.log(err.stack);
@@ -78,9 +93,9 @@ class UserModel {
   }
 
   async save(user) {
-    let { nome, idade, id } = user;
+    let { nome, password, id } = user;
     try {
-      const result = await User.update({ nome, idade }, { where: { id } });
+      const result = await User.update({ nome, password }, { where: { id } });
       return result;
     } catch (err) {
       console.log(err.stack);

@@ -4,15 +4,19 @@ const ApiError = require("../utils/apiError");
 
 class User {
   async index(req, res) {
-    let { nome, idade } = req.query;
+    let { nome, email, password } = req.query;
     let filter = {};
 
     if (nome) {
       filter.nome = nome;
     }
 
-    if (!isNaN(idade)) {
-      filter.idade = idade;
+    if (password) {
+      filter.password = password;
+    }
+
+    if (email) {
+      filter.email = email;
     }
 
     let userModel = new UserModel();
@@ -30,48 +34,58 @@ class User {
     if (!user) {
       throw new ApiError(404, "usuário não encontrado");
     }
-
+    delete user.dataValues.password; //delete field password
     res.json(user);
   }
 
   async create(req, res) {
-    let { nome, idade } = req.body;
+    let { nome, email, password } = req.body;
 
-    if (!nome || !idade) {
-      throw new ApiError(400, "Informe o nome e idade do usuário");
+    if (!nome) {
+      throw new ApiError(400, "Informe o nome do usuário");
     }
 
-    let userModel = new UserModel(nome, idade);
+    if (!email) {
+      throw new ApiError(400, "Informe o email do usuário");
+    }
 
-    let checkUserExists = await userModel.findByName(nome);
-    if (checkUserExists) {
-      throw new ApiError(400, "Esse nome de usuário está indisponível");
+    if (!password) {
+      throw new ApiError(400, "Informe o password do usuário");
+    }
+
+    let userModel = new UserModel(nome, email, password);
+
+    let checkEmailTaken = await userModel.findByEmail(email);
+    if (checkEmailTaken) {
+      throw new ApiError(400, "Esse email ja foi cadastrado");
     }
 
     const user = await userModel.create(userModel);
-
+    delete user.dataValues.password; //delete field password
     res.json(user);
   }
 
   async update(req, res) {
-    let { nome, idade } = req.body;
+    let { nome, password } = req.body;
     let { id } = req.params;
 
-    let userModel = new UserModel(nome, idade);
-
+    let userModel = new UserModel(nome, password);
     let checkUserExists = await userModel.findById(id);
+
     if (!checkUserExists) {
       throw new ApiError(404, "usuário não encontrado");
     }
 
-    let checkUserNameAlreadyExists = await userModel.findByName(nome);
-    if (checkUserNameAlreadyExists) {
-      throw new ApiError(400, "Esse nome de usuário está indisponível");
-    }
+    let updateUser = {
+      id: checkUserExists.id,
+      nome: userModel.nome,
+      email: checkUserExists.email,
+      password: userModel.password,
+    };
 
-    await userModel.save({ id, ...userModel });
+    await userModel.save(updateUser);
 
-    res.json({ id, ...userModel });
+    res.json(updateUser);
   }
 
   async destroy(req, res) {
