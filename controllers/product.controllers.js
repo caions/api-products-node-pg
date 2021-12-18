@@ -1,13 +1,11 @@
 const ProductModel = require("../model/product.model");
 const ApiError = require("../utils/apiError");
-const jwt = require("jsonwebtoken");
+const { createJwt } = require("../utils/jwt");
 
 class Product {
   async auth(req, res) {
     const id = 1; //esse id viria do banco de dados
-    var token = jwt.sign({ id }, "token-secreto", {
-      // expiresIn: 300, // expires in 5min
-    });
+    const token = createJwt(id, "token-secreto");
 
     res.status(200).send({ auth: true, token: token });
   }
