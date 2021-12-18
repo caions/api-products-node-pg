@@ -1,7 +1,7 @@
 const express = require("express");
 const route = express.Router();
 const productController = require("../controllers/product.controllers");
-const verifyJWT = require("../controllers/verifyJwt");
+const verifyJWT = require("../utils/verifyJwt");
 
 route.post("/auth", productController.auth);
 
