@@ -74,7 +74,10 @@ class User {
     let { nome, password } = req.body;
     let { id } = req.params;
 
-    let userModel = new UserModel(nome, password);
+    const hashedPassword = hashData(password);
+
+    let userModel = new UserModel(nome, "", hashedPassword);
+
     let checkUserExists = await userModel.findById(id);
 
     if (!checkUserExists) {
@@ -88,6 +91,8 @@ class User {
     };
 
     await userModel.save(updateUser);
+
+    delete updateUser.password;
 
     res.json(updateUser);
   }
