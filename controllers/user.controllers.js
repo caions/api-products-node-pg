@@ -2,6 +2,7 @@ const UserModel = require("../model/user.model");
 const ProductModel = require("../model/product.model");
 const ApiError = require("../utils/apiError");
 const jwt = require("../utils/jwt");
+const { hashData, compareData } = require("../utils/bcrypt");
 
 class User {
   async index(req, res) {
@@ -54,7 +55,9 @@ class User {
       throw new ApiError(400, "Informe o password do usuário");
     }
 
-    let userModel = new UserModel(nome, email, password);
+    const hashedPassword = hashData(password);
+
+    let userModel = new UserModel(nome, email, hashedPassword);
 
     let checkEmailTaken = await userModel.findByEmail(email);
     if (checkEmailTaken) {
@@ -148,7 +151,9 @@ class User {
     const userModel = new UserModel();
     const findUser = await userModel.findByEmail(email);
     if (findUser) {
-      if (findUser.password == password) {
+      let matchPassword = compareData(password, findUser.password);
+
+      if (matchPassword) {
         const token = jwt.createJwt(findUser.id, "token-secreto");
         res.status(200).json({ token });
       } else {
