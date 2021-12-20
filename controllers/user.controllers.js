@@ -166,7 +166,9 @@ class User {
 
   async register(req, res) {
     const { nome, email, password } = req.body;
-    const userModel = new UserModel(nome, email, password);
+    const hashedPassword = hashData(password);
+
+    let userModel = new UserModel(nome, email, hashedPassword);
 
     if (!nome) {
       throw new ApiError(400, "Informe o nome do usuário");
