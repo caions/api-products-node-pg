@@ -19,11 +19,9 @@ class UserModel {
     }
 
     if (email) {
-      options.email = email;
-    }
-
-    if (password) {
-      options.password = password;
+      options.email = {
+        [Op.like]: `%${email}%`,
+      };
     }
 
     try {
