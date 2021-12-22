@@ -3,13 +3,6 @@ const ApiError = require("../utils/apiError");
 const { createJwt } = require("../utils/jwt");
 
 class Product {
-  async auth(req, res) {
-    const id = 1; //esse id viria do banco de dados
-    const token = createJwt(id, "token-secreto");
-
-    res.status(200).send({ auth: true, token: token });
-  }
-
   async index(req, res) {
     let { nome, preco } = req.query;
     let filter = {};

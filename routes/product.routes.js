@@ -3,8 +3,6 @@ const route = express.Router();
 const productController = require("../controllers/product.controllers");
 const checkAuth = require("../middlewares/checkAuth");
 
-route.post("/auth", productController.auth);
-
 route.use(checkAuth);
 route.get("/", productController.index);
 route.get("/:id", productController.show);
