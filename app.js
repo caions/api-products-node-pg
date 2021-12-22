@@ -1,6 +1,9 @@
 require("express-async-errors");
-require("dotenv").config();
+const { PORT, NODE_ENV } = require("./config/environment");
+
+console.log(`NODE_ENV=${NODE_ENV}`);
 const express = require("express");
+
 const app = express();
 const routes = require("./routes/index");
 const handlerError = require("./utils/handleError");
@@ -13,7 +16,6 @@ app.use(routes);
 // handler errors of aplication
 app.use(handlerError);
 
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("Server is running on http://localhost:" + PORT);
 });
