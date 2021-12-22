@@ -1,6 +1,9 @@
-const ProductModel = require("../model/product.model");
+const CreateProductService = require("../services/Product/CreateProductService");
+const DeleteProductService = require("../services/Product/DeleteProductService");
+const ListProductService = require("../services/Product/ListProductService");
+const ShowProductService = require("../services/Product/ShowProductService");
+const UpdateProductService = require("../services/Product/UpdateProductService");
 const ApiError = require("../utils/apiError");
-const { createJwt } = require("../utils/jwt");
 
 class Product {
   async index(req, res) {
@@ -15,8 +18,8 @@ class Product {
       filter.preco = preco;
     }
 
-    let productModel = new ProductModel();
-    let product = await productModel.filter(filter);
+    const listProductService = new ListProductService();
+    const product = await listProductService.execute(filter);
 
     res.json(product);
   }
@@ -24,12 +27,8 @@ class Product {
   async show(req, res) {
     let { id } = req.params;
 
-    let productModel = new ProductModel();
-    let product = await productModel.findById(id);
-
-    if (!product) {
-      throw new ApiError(404, "Produto não encontrado");
-    }
+    const showProductService = new ShowProductService();
+    const product = await showProductService.execute(id);
 
     res.json(product);
   }
@@ -41,14 +40,8 @@ class Product {
       throw new ApiError(400, "Informe o nome e preco do produto");
     }
 
-    let productModel = new ProductModel(nome, preco);
-
-    let checkProductExists = await productModel.findByName(nome);
-    if (checkProductExists) {
-      throw new ApiError(400, "Esse nome de produto está indisponível");
-    }
-
-    const product = await productModel.create(productModel);
+    const createProductService = new CreateProductService();
+    const product = await createProductService.execute(nome, preco);
 
     res.json(product);
   }
@@ -57,19 +50,8 @@ class Product {
     let { nome, preco } = req.body;
     let { id } = req.params;
 
-    let productModel = new ProductModel(nome, preco);
-
-    let checkProductExists = await productModel.findById(id);
-    if (!checkProductExists) {
-      throw new ApiError(404, "Produto não encontrado");
-    }
-
-    let checkProductNameAlreadyExists = await productModel.findByName(nome);
-    if (checkProductNameAlreadyExists) {
-      throw new ApiError(400, "Esse nome de produto está indisponível");
-    }
-
-    await productModel.save({ id, ...productModel });
+    const updateProductService = new UpdateProductService();
+    const productModel = await updateProductService.execute(id, nome, preco);
 
     res.json({ id, ...productModel });
   }
@@ -77,14 +59,9 @@ class Product {
   async destroy(req, res) {
     let { id } = req.params;
 
-    let productModel = new ProductModel();
+    const deleteProductService = new DeleteProductService();
+    await deleteProductService.execute(id);
 
-    let checkProductExists = await productModel.findById(id);
-    if (!checkProductExists) {
-      throw new ApiError(404, "Produto não encontrado");
-    }
-
-    await productModel.deleteById(id);
     res.json();
   }
 }
