@@ -9,7 +9,7 @@ class UserModel {
     this.updated_at;
   }
 
-  async filter({ nome, email, password }) {
+  async filter({ nome, email }) {
     let options = {};
 
     if (nome) {

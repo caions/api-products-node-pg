@@ -1,42 +1,39 @@
-const UserModel = require("../model/user.model");
-const ProductModel = require("../model/product.model");
 const ApiError = require("../utils/apiError");
-const jwt = require("../utils/jwt");
-const { hashData, compareData } = require("../utils/bcrypt");
+const ListUserService = require("../services/User/ListUserService");
+const ShowUserService = require("../services/User/ShowUserService");
+const CreateUserService = require("../services/User/CreateUserService");
+const UpdateUserService = require("../services/User/UpdateUserService");
+const DeleteUserService = require("../services/User/DeleteUserService");
+const AddProductUserService = require("../services/User/AddProductUserService");
+const RemoveProductUserService = require("../services/User/RemoveProductUserService");
+const LoginUserService = require("../services/User/LoginUserService");
+const RegisterUserService = require("../services/User/RegisterUserService");
 
 class User {
   async index(req, res) {
-    let { nome, email, password } = req.query;
+    let { nome, email } = req.query;
     let filter = {};
 
     if (nome) {
       filter.nome = nome;
     }
 
-    if (password) {
-      filter.password = password;
-    }
-
     if (email) {
       filter.email = email;
     }
 
-    let userModel = new UserModel();
-    let user = await userModel.filter(filter);
+    const userModel = new ListUserService();
+    let user = await userModel.execute(filter);
 
     res.json(user);
   }
 
   async show(req, res) {
-    let { id } = req.params;
+    const { id } = req.params;
 
-    let userModel = new UserModel();
-    let user = await userModel.findById(id);
+    const showUserService = new ShowUserService();
+    const user = await showUserService.execute(id);
 
-    if (!user) {
-      throw new ApiError(404, "usuário não encontrado");
-    }
-    delete user.dataValues.password; //delete field password
     res.json(user);
   }
 
@@ -55,44 +52,18 @@ class User {
       throw new ApiError(400, "Informe o password do usuário");
     }
 
-    const hashedPassword = hashData(password);
+    const createUserService = new CreateUserService();
+    const user = await createUserService.execute(nome, email, password);
 
-    let userModel = new UserModel(nome, email, hashedPassword);
-
-    let checkEmailTaken = await userModel.findByEmail(email);
-    if (checkEmailTaken) {
-      throw new ApiError(400, "Esse email ja está em uso");
-    }
-
-    const user = await userModel.create(userModel);
-    delete user.dataValues.password; //delete field password
     res.status(201).json(user);
   }
 
-  // TODO refactor update
   async update(req, res) {
     let { nome, password } = req.body;
     let { id } = req.params;
 
-    const hashedPassword = hashData(password);
-
-    let userModel = new UserModel(nome, "", hashedPassword);
-
-    let checkUserExists = await userModel.findById(id);
-
-    if (!checkUserExists) {
-      throw new ApiError(404, "usuário não encontrado");
-    }
-    let updateUser = {
-      id: checkUserExists.id,
-      nome: userModel.nome,
-      email: checkUserExists.email,
-      password: userModel.password,
-    };
-
-    await userModel.save(updateUser);
-
-    delete updateUser.password;
+    const updateUserService = new UpdateUserService();
+    const updateUser = await updateUserService.execute(id, nome, password);
 
     res.json(updateUser);
   }
@@ -100,80 +71,39 @@ class User {
   async destroy(req, res) {
     let { id } = req.params;
 
-    let userModel = new UserModel();
+    const deleteUserService = new DeleteUserService();
+    await deleteUserService.execute(id);
 
-    let checkUserExists = await userModel.findById(id);
-    if (!checkUserExists) {
-      throw new ApiError(404, "usuário não encontrado");
-    }
-
-    await userModel.deleteById(id);
     res.json();
   }
 
   async addProduct(req, res) {
     const { userId, productId } = req.body;
 
-    let userModel = new UserModel();
-    let productModel = new ProductModel();
+    const addProductUserService = new AddProductUserService();
+    const result = await addProductUserService.execute(userId, productId);
 
-    let checkUserExists = await userModel.findById(userId);
-    if (!checkUserExists) {
-      throw new ApiError(404, "usuário não encontrado");
-    }
-
-    const checkProductExists = await productModel.findById(productId);
-    if (!checkProductExists) {
-      throw new ApiError(404, "produto não encontrado");
-    }
-
-    const result = await userModel.addProduct(userId, productId);
     res.json(result);
   }
 
   async removeProduct(req, res) {
     const { userId, productId } = req.body;
 
-    let userModel = new UserModel();
-    let productModel = new ProductModel();
-
-    let checkUserExists = await userModel.findById(userId);
-    if (!checkUserExists) {
-      throw new ApiError(404, "usuário não encontrado");
-    }
-
-    const checkProductExists = await productModel.findById(productId);
-    if (!checkProductExists) {
-      throw new ApiError(404, "produto não encontrado");
-    }
-
-    const result = await userModel.removeProduct(userId, productId);
+    const removeProductUserService = new RemoveProductUserService();
+    const result = await removeProductUserService.execute(userId, productId);
     res.json(result);
   }
 
   async login(req, res) {
     const { email, password } = req.body;
-    const userModel = new UserModel();
-    const findUser = await userModel.findByEmail(email);
-    if (findUser) {
-      let matchPassword = compareData(password, findUser.password);
+    const loginUserService = new LoginUserService();
+    const token = await loginUserService.execute(email, password);
 
-      if (matchPassword) {
-        const token = jwt.createJwt(findUser.id, "token-secreto");
-        res.status(200).json({ token });
-      } else {
-        throw new ApiError("404", "Credenciais inválidas");
-      }
-    } else {
-      throw new ApiError("404", "Credenciais inválidas");
-    }
+    res.status(200).json({ token });
   }
 
   async register(req, res) {
     const { nome, email, password } = req.body;
-    const hashedPassword = hashData(password);
-
-    let userModel = new UserModel(nome, email, hashedPassword);
 
     if (!nome) {
       throw new ApiError(400, "Informe o nome do usuário");
@@ -187,15 +117,10 @@ class User {
       throw new ApiError(400, "Informe o password do usuário");
     }
 
-    const checkEmailAlreadyExist = await userModel.findByEmail(email);
+    const registerUserService = new RegisterUserService();
+    const user = await registerUserService.execute(nome, email, password);
 
-    if (!checkEmailAlreadyExist) {
-      const user = await userModel.create(userModel);
-      delete user.dataValues.password;
-      res.status(201).json(user);
-    } else {
-      throw new ApiError("400", "Esse email já está em uso");
-    }
+    res.status(201).json(user);
   }
 }
 
