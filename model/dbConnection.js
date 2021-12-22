@@ -1,11 +1,11 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = new Sequelize({
+  username: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  host: process.env.DB_HOST,
   database: "postgres",
-  username: "postgres",
-  password: "postgres",
   dialect: "postgres",
-  host: "172.17.0.2",
   logging: false,
 });
 
