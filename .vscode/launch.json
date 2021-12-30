@@ -7,12 +7,12 @@
     {
       "type": "pwa-node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "Meu Debugger",
       "skipFiles": [
         "${workspaceFolder}/node_modules/**/*.js",
         "<node_internals>/**/*.js"
       ],
-      "program": "${workspaceFolder}/app.js"
+      "program": "${workspaceFolder}/app/index.js"
     }
   ]
 }
