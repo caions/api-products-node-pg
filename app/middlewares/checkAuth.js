@@ -1,5 +1,6 @@
 const ApiError = require("../utils/apiError");
 const { verifyJwt } = require("../utils/jwt");
+const { SECRET_TOKEN_KEY } = require("../config/environment");
 
 const checkAuth = (req, res, next) => {
   const headers = req.headers["authorization"];
@@ -11,7 +12,7 @@ const checkAuth = (req, res, next) => {
   const bearer = headers.split(" ");
   const token = bearer[1];
 
-  verifyJwt(token, "token-secreto");
+  verifyJwt(token, SECRET_TOKEN_KEY);
   next();
 };
 

@@ -11,4 +11,5 @@ module.exports = {
   DB_PASS: process.env.DB_PASS,
   DB_HOST: process.env.DB_HOST,
   PORT: process.env.PORT || 3001,
+  SECRET_TOKEN_KEY: process.env.SECRET_TOKEN_KEY,
 };

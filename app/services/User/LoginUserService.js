@@ -2,6 +2,7 @@ const UserModel = require("../../model/user.model");
 const ApiError = require("../../utils/apiError");
 const { compareData } = require("../../utils/bcrypt");
 const jwt = require("../../utils/jwt");
+const { SECRET_TOKEN_KEY } = require("../../config/environment");
 
 class LoginUserService {
   async execute(email, password) {
@@ -11,7 +12,7 @@ class LoginUserService {
       let matchPassword = compareData(password, findUser.password);
 
       if (matchPassword) {
-        const token = jwt.createJwt(findUser.id, "token-secreto");
+        const token = jwt.createJwt(findUser.id, SECRET_TOKEN_KEY);
         return token;
       } else {
         throw new ApiError("404", "Credenciais inválidas");
