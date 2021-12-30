@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { User, Product } = require("../model/dbConnection");
+const { User, Product } = require("./dbConnection");
 class UserModel {
   constructor(nome, email, password) {
     this.nome = nome;

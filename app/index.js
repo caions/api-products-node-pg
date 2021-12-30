@@ -6,7 +6,7 @@ const express = require("express");
 
 const app = express();
 const routes = require("./routes/index");
-const handlerError = require("./utils/handleError");
+const handlerError = require("./utils/apiError");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
