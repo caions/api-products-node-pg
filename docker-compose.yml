@@ -6,6 +6,8 @@ services:
     command: npm start
     ports:
       - "3000:3000"
+    volumes:
+      - .:/usr/app
     env_file:
       - backend.env
     depends_on:
@@ -18,7 +20,7 @@ services:
     env_file:
       - db.env
     volumes:
-      - volume-api-products:/var/lib/postgresql/data
+      - meu-volume:/var/lib/postgresql/data
 
 volumes:
-  volume-api-products: {}
+  meu-volume: {}
