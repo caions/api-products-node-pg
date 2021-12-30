@@ -20,7 +20,7 @@ services:
     env_file:
       - db.env
     volumes:
-      - meu-volume:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
 
 volumes:
-  meu-volume: {}
+  db: {}
