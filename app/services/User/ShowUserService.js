@@ -1,4 +1,4 @@
-const UserModel = require("../../model/user.model");
+const UserModel = require("../../model/UserRepository");
 const ApiError = require("../../utils/apiError");
 
 class ShowUserService {

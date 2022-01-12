@@ -1,5 +1,5 @@
-const ProductModel = require("../../model/product.model");
-const UserModel = require("../../model/user.model");
+const ProductModel = require("../../model/ProductRepository");
+const UserModel = require("../../model/UserRepository");
 const ApiError = require("../../utils/apiError");
 
 class RemoveProductUserService {

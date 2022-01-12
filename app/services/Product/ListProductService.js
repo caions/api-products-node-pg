@@ -1,4 +1,4 @@
-const ProductModel = require("../../model/product.model");
+const ProductModel = require("../../model/ProductRepository");
 
 class ListProductService {
   async execute(filter) {
