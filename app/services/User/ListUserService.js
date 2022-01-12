@@ -1,4 +1,4 @@
-const UserModel = require("../../model/UserRepository");
+const UserModel = require("../../model/repositories/UserRepository");
 
 class ListUserService {
   async execute(filter) {

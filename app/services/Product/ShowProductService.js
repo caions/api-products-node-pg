@@ -1,4 +1,4 @@
-const ProductModel = require("../../model/ProductRepository");
+const ProductModel = require("../../model/repositories/ProductRepository");
 const ApiError = require("../../utils/apiError");
 
 class ShowProductService {
