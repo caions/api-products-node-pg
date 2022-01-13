@@ -2,24 +2,21 @@ const ApiError = require("../../utils/apiError");
 
 class AddProductUserService {
   constructor(UserModel, ProductModel) {
-    this.userModel = UserModel;
-    this.productModel = ProductModel;
+    this.userModel = new UserModel();
+    this.productModel = new ProductModel();
   }
   async execute(userId, productId) {
-    let userModel = new this.userModel();
-    let productModel = new this.productModel();
-
-    let checkUserExists = await userModel.findById(userId);
+    let checkUserExists = await this.userModel.findById(userId);
     if (!checkUserExists) {
       throw new ApiError(404, "usuário não encontrado");
     }
 
-    const checkProductExists = await productModel.findById(productId);
+    const checkProductExists = await this.productModel.findById(productId);
     if (!checkProductExists) {
       throw new ApiError(404, "produto não encontrado");
     }
 
-    const result = await userModel.addProduct(userId, productId);
+    const result = await this.userModel.addProduct(userId, productId);
     return result;
   }
 }

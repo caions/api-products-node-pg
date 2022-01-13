@@ -5,11 +5,10 @@ const { SECRET_TOKEN_KEY } = require("../../config/environment");
 
 class LoginUserService {
   constructor(UserModel) {
-    this.userModel = UserModel;
+    this.userModel = new UserModel();
   }
   async execute(email, password) {
-    const userModel = new this.userModel();
-    const findUser = await userModel.findByEmail(email);
+    const findUser = await this.userModel.findByEmail(email);
     if (findUser) {
       let matchPassword = compareData(password, findUser.password);
 

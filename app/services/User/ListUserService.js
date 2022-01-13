@@ -1,12 +1,11 @@
 class ListUserService {
   constructor(UserModel) {
-    this.userModel = UserModel;
+    this.userModel = new UserModel();
   }
 
   async execute(filter) {
     try {
-      const userModel = new this.userModel();
-      const users = await userModel.filter(filter);
+      const users = await this.userModel.filter(filter);
       return users;
     } catch (err) {
       console.log(err);

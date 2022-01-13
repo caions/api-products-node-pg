@@ -3,15 +3,18 @@ const { hashData } = require("../../utils/bcrypt");
 
 class RegisterUserService {
   constructor(UserModel) {
-    this.userModel = UserModel;
+    this.userModel = new UserModel();
   }
   async execute(nome, email, password) {
     const hashedPassword = hashData(password);
-    let userModel = new this.userModel(nome, email, hashedPassword);
-    const checkEmailAlreadyExist = await userModel.findByEmail(email);
+    const checkEmailAlreadyExist = await this.userModel.findByEmail(email);
 
     if (!checkEmailAlreadyExist) {
-      const user = await userModel.create(userModel);
+      const user = await this.userModel.create({
+        nome,
+        email,
+        password: hashedPassword,
+      });
       delete user.dataValues.password;
       return user;
     } else {

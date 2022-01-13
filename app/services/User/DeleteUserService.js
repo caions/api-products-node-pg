@@ -3,17 +3,15 @@ const ApiError = require("../../utils/apiError");
 
 class DeleteUserService {
   constructor(UserModel) {
-    this.userModel = UserModel;
+    this.userModel = new UserModel();
   }
   async execute(id) {
-    let userModel = new this.userModel();
-
-    let checkUserExists = await userModel.findById(id);
+    let checkUserExists = await this.userModel.findById(id);
     if (!checkUserExists) {
       throw new ApiError(404, "usuário não encontrado");
     }
 
-    await userModel.deleteById(id);
+    await this.userModel.deleteById(id);
   }
 }
 

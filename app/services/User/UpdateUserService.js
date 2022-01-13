@@ -3,26 +3,24 @@ const { hashData } = require("../../utils/bcrypt");
 
 class UpdateUserService {
   constructor(UserModel) {
-    this.userModel = UserModel;
+    this.userModel = new UserModel();
   }
   async execute(id, nome, password) {
     const hashedPassword = hashData(password);
 
-    let userModel = new this.userModel(nome, "", hashedPassword);
-
-    let checkUserExists = await userModel.findById(id);
+    let checkUserExists = await this.userModel.findById(id);
 
     if (!checkUserExists) {
       throw new ApiError(404, "usuário não encontrado");
     }
     let updateUser = {
       id: checkUserExists.id,
-      nome: userModel.nome,
+      nome,
       email: checkUserExists.email,
-      password: userModel.password,
+      password: hashedPassword,
     };
 
-    await userModel.save(updateUser);
+    await this.userModel.save(updateUser);
 
     delete updateUser.password;
 

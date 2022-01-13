@@ -2,26 +2,26 @@ const ApiError = require("../../utils/apiError");
 
 class UpdateProductService {
   constructor(ProductModel) {
-    this.productModel = ProductModel;
+    this.productModel = new ProductModel();
   }
 
   async execute(id, nome, preco) {
-    let productModel = new this.productModel(nome, preco);
-
-    let checkProductExists = await productModel.findById(id);
+    let checkProductExists = await this.productModel.findById(id);
 
     if (!checkProductExists) {
       throw new ApiError(404, "Produto não encontrado");
     }
 
-    let checkProductNameAlreadyExists = await productModel.findByName(nome);
+    let checkProductNameAlreadyExists = await this.productModel.findByName(
+      nome
+    );
     if (checkProductNameAlreadyExists) {
       throw new ApiError(400, "Esse nome de produto está indisponível");
     }
 
-    await productModel.save({ id, ...productModel });
+    await this.productModel.save({ id, nome, preco });
 
-    return productModel;
+    return { id, nome, preco };
   }
 }
 
