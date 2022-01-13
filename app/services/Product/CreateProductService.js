@@ -13,6 +13,18 @@ class CreateProductService {
 
     const product = await this.productModel.create({ nome, preco });
 
+    if (!isNaN(product.nome)) {
+      throw new ApiError(400, "O nome do produto não pode ser numerico");
+    }
+
+    if (!product.nome) {
+      throw new ApiError(400, "O produto não contem um nome");
+    }
+
+    if (!product.preco) {
+      throw new ApiError(400, "O produto não contem um preco");
+    }
+
     return product;
   }
 }
