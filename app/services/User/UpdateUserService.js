@@ -1,12 +1,14 @@
-const UserModel = require("../../model/repositories/UserRepository");
 const ApiError = require("../../utils/apiError");
 const { hashData } = require("../../utils/bcrypt");
 
 class UpdateUserService {
+  constructor(UserModel) {
+    this.userModel = UserModel;
+  }
   async execute(id, nome, password) {
     const hashedPassword = hashData(password);
 
-    let userModel = new UserModel(nome, "", hashedPassword);
+    let userModel = new this.userModel(nome, "", hashedPassword);
 
     let checkUserExists = await userModel.findById(id);
 

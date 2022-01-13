@@ -1,9 +1,11 @@
-const UserModel = require("../../model/repositories/UserRepository");
-
 class ListUserService {
+  constructor(UserModel) {
+    this.userModel = UserModel;
+  }
+
   async execute(filter) {
     try {
-      const userModel = new UserModel();
+      const userModel = new this.userModel();
       const users = await userModel.filter(filter);
       return users;
     } catch (err) {

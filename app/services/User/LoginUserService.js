@@ -1,12 +1,14 @@
-const UserModel = require("../../model/repositories/UserRepository");
 const ApiError = require("../../utils/apiError");
 const { compareData } = require("../../utils/bcrypt");
 const jwt = require("../../utils/jwt");
 const { SECRET_TOKEN_KEY } = require("../../config/environment");
 
 class LoginUserService {
+  constructor(UserModel) {
+    this.userModel = UserModel;
+  }
   async execute(email, password) {
-    const userModel = new UserModel();
+    const userModel = new this.userModel();
     const findUser = await userModel.findByEmail(email);
     if (findUser) {
       let matchPassword = compareData(password, findUser.password);

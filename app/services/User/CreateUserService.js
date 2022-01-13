@@ -1,12 +1,14 @@
-const UserModel = require("../../model/repositories/UserRepository");
 const ApiError = require("../../utils/apiError");
 const { hashData } = require("../../utils/bcrypt");
 
 class CreateUserService {
+  constructor(UserModel) {
+    this.userModel = UserModel;
+  }
   async execute(nome, email, password) {
     const hashedPassword = hashData(password);
 
-    let userModel = new UserModel(nome, email, hashedPassword);
+    let userModel = new this.userModel(nome, email, hashedPassword);
 
     let checkEmailTaken = await userModel.findByEmail(email);
     if (checkEmailTaken) {

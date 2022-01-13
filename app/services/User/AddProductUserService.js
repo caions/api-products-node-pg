@@ -1,11 +1,13 @@
-const ProductModel = require("../../model/repositories/ProductRepository");
-const UserModel = require("../../model/repositories/UserRepository");
 const ApiError = require("../../utils/apiError");
 
 class AddProductUserService {
+  constructor(UserModel, ProductModel) {
+    this.userModel = UserModel;
+    this.productModel = ProductModel;
+  }
   async execute(userId, productId) {
-    let userModel = new UserModel();
-    let productModel = new ProductModel();
+    let userModel = new this.userModel();
+    let productModel = new this.productModel();
 
     let checkUserExists = await userModel.findById(userId);
     if (!checkUserExists) {

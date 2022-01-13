@@ -1,9 +1,11 @@
-const UserModel = require("../../model/repositories/UserRepository");
 const ApiError = require("../../utils/apiError");
 
 class ShowUserService {
+  constructor(UserModel) {
+    this.userModel = UserModel;
+  }
   async execute(id) {
-    const userModel = new UserModel();
+    const userModel = new this.userModel();
     const user = await userModel.findById(id);
 
     if (!user) {
