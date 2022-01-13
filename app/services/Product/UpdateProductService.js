@@ -1,9 +1,12 @@
-const ProductModel = require("../../model/repositories/ProductRepository");
 const ApiError = require("../../utils/apiError");
 
 class UpdateProductService {
+  constructor(ProductModel) {
+    this.productModel = ProductModel;
+  }
+
   async execute(id, nome, preco) {
-    let productModel = new ProductModel(nome, preco);
+    let productModel = new this.productModel(nome, preco);
 
     let checkProductExists = await productModel.findById(id);
 

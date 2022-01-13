@@ -1,8 +1,10 @@
+const ProductModel = require("../model/repositories/ProductRepository");
 const CreateProductService = require("../services/Product/CreateProductService");
 const DeleteProductService = require("../services/Product/DeleteProductService");
 const ListProductService = require("../services/Product/ListProductService");
 const ShowProductService = require("../services/Product/ShowProductService");
 const UpdateProductService = require("../services/Product/UpdateProductService");
+
 const ApiError = require("../utils/apiError");
 
 class Product {
@@ -18,7 +20,7 @@ class Product {
       filter.preco = preco;
     }
 
-    const listProductService = new ListProductService();
+    const listProductService = new ListProductService(ProductModel);
     const product = await listProductService.execute(filter);
 
     res.json(product);
@@ -27,7 +29,7 @@ class Product {
   async show(req, res) {
     let { id } = req.params;
 
-    const showProductService = new ShowProductService();
+    const showProductService = new ShowProductService(ProductModel);
     const product = await showProductService.execute(id);
 
     res.json(product);
@@ -40,7 +42,7 @@ class Product {
       throw new ApiError(400, "Informe o nome e preco do produto");
     }
 
-    const createProductService = new CreateProductService();
+    const createProductService = new CreateProductService(ProductModel);
     const product = await createProductService.execute(nome, preco);
 
     res.json(product);
@@ -50,7 +52,7 @@ class Product {
     let { nome, preco } = req.body;
     let { id } = req.params;
 
-    const updateProductService = new UpdateProductService();
+    const updateProductService = new UpdateProductService(ProductModel);
     const productModel = await updateProductService.execute(id, nome, preco);
 
     res.json({ id, ...productModel });
@@ -59,7 +61,7 @@ class Product {
   async destroy(req, res) {
     let { id } = req.params;
 
-    const deleteProductService = new DeleteProductService();
+    const deleteProductService = new DeleteProductService(ProductModel);
     await deleteProductService.execute(id);
 
     res.json();
