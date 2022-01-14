@@ -30,6 +30,19 @@ class FakeProductRepository {
 
     return product;
   }
+
+  findById(productId) {
+    const product = this.#products.find(
+      (products) => products.id === productId
+    );
+
+    return product;
+  }
+
+  deleteById(id) {
+    const index = this.#products.findIndex((product) => product.id === id);
+    this.#products.splice(index, 1);
+  }
 }
 
 module.exports = new FakeProductRepository();
