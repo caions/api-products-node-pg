@@ -1,6 +1,6 @@
 class ListProductService {
   constructor(ProductRepository) {
-    this.productRepository = new ProductRepository();
+    this.productRepository = ProductRepository;
   }
 
   async execute(filter) {

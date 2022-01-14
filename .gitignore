@@ -5,4 +5,3 @@ db.env
 backend.env
 coverage
 jest.config.js
-coverage/clover.xml

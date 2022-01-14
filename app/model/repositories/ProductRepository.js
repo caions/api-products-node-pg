@@ -88,4 +88,4 @@ class ProductRepository {
   }
 }
 
-module.exports = ProductRepository;
+module.exports = new ProductRepository();

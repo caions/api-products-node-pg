@@ -15,8 +15,9 @@ test("should be returned one product in array", async () => {
   const createProductService = new CreateProductService(FakeProductRepository);
 
   await createProductService.execute("balão", 15.5);
+  await createProductService.execute("balão2", 15.5);
 
   const products = await listProductService.execute();
 
-  expect(products).toHaveLength(1);
+  expect(products).toHaveLength(2);
 });

@@ -19,10 +19,10 @@ test("should be returned one product with id 2", async () => {
 
 test("should not be able to create a new product with same name", async () => {
   const createProductService = new CreateProductService(ProductRepository);
-  await createProductService.execute("Boneca", 10.5);
+  await createProductService.execute("Bonecas", 10.5);
 
   await expect(
-    createProductService.execute("Boneca", 10.5)
+    createProductService.execute("Bonecas", 10.5)
   ).rejects.toBeInstanceOf(ApiError);
 });
 

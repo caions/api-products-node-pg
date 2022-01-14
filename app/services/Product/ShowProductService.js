@@ -2,7 +2,7 @@ const ApiError = require("../../utils/apiError");
 
 class ShowProductService {
   constructor(ProductRepository) {
-    this.productRepository = new ProductRepository();
+    this.productRepository = ProductRepository;
   }
 
   async execute(id) {

@@ -1,7 +1,7 @@
 class FakeProductRepository {
   #products = []; // banco de dados onde sera armazenado
   constructor(nome, preco) {
-    //this.id = 1;
+    // this.id = this.#products.length;
     this.nome = nome;
     this.preco = preco;
   }
@@ -11,8 +11,8 @@ class FakeProductRepository {
   }
 
   create(product) {
-    this.#products.push({ ...product, id: this.#products.length });
-    return { ...product, id: this.#products.length };
+    this.#products.push({ ...product, id: this.#products.length - 1 });
+    return { ...product, id: this.#products.length - 1 };
   }
 
   findByName(productName) {
@@ -24,4 +24,4 @@ class FakeProductRepository {
   }
 }
 
-module.exports = FakeProductRepository;
+module.exports = new FakeProductRepository();
