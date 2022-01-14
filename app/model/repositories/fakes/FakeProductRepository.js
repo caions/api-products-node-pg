@@ -18,7 +18,7 @@ class FakeProductRepository {
   }
   // TODO refactor create function
   create(product) {
-    const productWithId = { id: this.#products.length, ...product };
+    const productWithId = { id: this.#products.length + 1, ...product };
     this.#products.push(productWithId);
     return productWithId;
   }
