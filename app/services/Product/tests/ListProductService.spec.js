@@ -2,22 +2,39 @@ const FakeProductRepository = require("../../../model/repositories/fakes/FakePro
 const CreateProductService = require("../CreateProductService");
 const ListProductService = require("../ListProductService");
 
-test("should be returned one empty array", async () => {
-  const listProductService = new ListProductService(FakeProductRepository);
+const listProductService = new ListProductService(FakeProductRepository);
+const createProductService = new CreateProductService(FakeProductRepository);
 
-  const products = await listProductService.execute();
+describe("Tests with empty dataBase", () => {
+  test("should be returned one empty array", async () => {
+    const products = await listProductService.execute({});
 
-  expect(products).toStrictEqual([]);
+    expect(products).toStrictEqual([]);
+  });
 });
 
-test("should be returned one product in array", async () => {
-  const listProductService = new ListProductService(FakeProductRepository);
-  const createProductService = new CreateProductService(FakeProductRepository);
+describe("Tests with three objects in the dataBase", () => {
+  beforeAll(async () => {
+    await createProductService.execute("boneca", 14.5);
+    await createProductService.execute("boneca2", 14.9);
+    await createProductService.execute("bebe", 10.5);
+  });
 
-  await createProductService.execute("balão", 15.5);
-  await createProductService.execute("balão2", 15.5);
+  test("should be returned three products in array", async () => {
+    const products = await listProductService.execute({});
 
-  const products = await listProductService.execute();
+    expect(products).toHaveLength(3);
+  });
 
-  expect(products).toHaveLength(2);
+  test("should be returned two filtered product in array with name bola", async () => {
+    const products = await listProductService.execute({ nome: "boneca" });
+
+    expect(products).toHaveLength(2);
+  });
+
+  test("should be returned two filtered product in array with preco equals to 14", async () => {
+    const products = await listProductService.execute({ preco: 14 });
+
+    expect(products).toHaveLength(2);
+  });
 });
