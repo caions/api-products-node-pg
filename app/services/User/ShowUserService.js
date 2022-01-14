@@ -2,7 +2,7 @@ const ApiError = require("../../utils/apiError");
 
 class ShowUserService {
   constructor(UserRepository) {
-    this.userRepository = new UserRepository();
+    this.userRepository = UserRepository;
   }
   async execute(id) {
     const user = await this.userRepository.findById(id);

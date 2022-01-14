@@ -3,7 +3,7 @@ const ApiError = require("../../utils/apiError");
 
 class DeleteUserService {
   constructor(UserRepository) {
-    this.userRepository = new UserRepository();
+    this.userRepository = UserRepository;
   }
   async execute(id) {
     let checkUserExists = await this.userRepository.findById(id);

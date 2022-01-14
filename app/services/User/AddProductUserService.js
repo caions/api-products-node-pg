@@ -2,8 +2,8 @@ const ApiError = require("../../utils/apiError");
 
 class AddProductUserService {
   constructor(UserRepository, ProductRepository) {
-    this.userRepository = new UserRepository();
-    this.productRepository = new ProductRepository();
+    this.userRepository = UserRepository;
+    this.productRepository = ProductRepository;
   }
   async execute(userId, productId) {
     let checkUserExists = await this.userRepository.findById(userId);

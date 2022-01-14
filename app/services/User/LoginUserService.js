@@ -5,7 +5,7 @@ const { SECRET_TOKEN_KEY } = require("../../config/environment");
 
 class LoginUserService {
   constructor(UserRepository) {
-    this.userRepository = new UserRepository();
+    this.userRepository = UserRepository;
   }
   async execute(email, password) {
     const findUser = await this.userRepository.findByEmail(email);

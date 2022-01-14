@@ -3,7 +3,7 @@ const { hashData } = require("../../utils/bcrypt");
 
 class UpdateUserService {
   constructor(UserRepository) {
-    this.userRepository = new UserRepository();
+    this.userRepository = UserRepository;
   }
   async execute(id, nome, password) {
     const hashedPassword = hashData(password);

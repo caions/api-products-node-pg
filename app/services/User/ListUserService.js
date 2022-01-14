@@ -1,6 +1,6 @@
 class ListUserService {
   constructor(UserRepository) {
-    this.userRepository = new UserRepository();
+    this.userRepository = UserRepository;
   }
 
   async execute(filter) {
