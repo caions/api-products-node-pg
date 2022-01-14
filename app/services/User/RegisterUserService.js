@@ -2,15 +2,15 @@ const ApiError = require("../../utils/apiError");
 const { hashData } = require("../../utils/bcrypt");
 
 class RegisterUserService {
-  constructor(UserModel) {
-    this.userModel = new UserModel();
+  constructor(UserRepository) {
+    this.userRepository = new UserRepository();
   }
   async execute(nome, email, password) {
     const hashedPassword = hashData(password);
-    const checkEmailAlreadyExist = await this.userModel.findByEmail(email);
+    const checkEmailAlreadyExist = await this.userRepository.findByEmail(email);
 
     if (!checkEmailAlreadyExist) {
-      const user = await this.userModel.create({
+      const user = await this.userRepository.create({
         nome,
         email,
         password: hashedPassword,

@@ -4,11 +4,11 @@ const jwt = require("../../utils/jwt");
 const { SECRET_TOKEN_KEY } = require("../../config/environment");
 
 class LoginUserService {
-  constructor(UserModel) {
-    this.userModel = new UserModel();
+  constructor(UserRepository) {
+    this.userRepository = new UserRepository();
   }
   async execute(email, password) {
-    const findUser = await this.userModel.findByEmail(email);
+    const findUser = await this.userRepository.findByEmail(email);
     if (findUser) {
       let matchPassword = compareData(password, findUser.password);
 

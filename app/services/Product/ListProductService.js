@@ -1,11 +1,10 @@
 class ListProductService {
-  constructor(ProductModel) {
-    this.productModel = ProductModel;
+  constructor(ProductRepository) {
+    this.productRepository = new ProductRepository();
   }
 
   async execute(filter) {
-    const productModel = new this.productModel();
-    const product = await productModel.filter(filter);
+    const product = await this.productRepository.filter(filter);
     return product;
   }
 }

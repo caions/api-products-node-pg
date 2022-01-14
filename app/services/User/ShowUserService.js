@@ -1,11 +1,11 @@
 const ApiError = require("../../utils/apiError");
 
 class ShowUserService {
-  constructor(UserModel) {
-    this.userModel = new UserModel();
+  constructor(UserRepository) {
+    this.userRepository = new UserRepository();
   }
   async execute(id) {
-    const user = await this.userModel.findById(id);
+    const user = await this.userRepository.findById(id);
 
     if (!user) {
       throw new ApiError(404, "usuário não encontrado");

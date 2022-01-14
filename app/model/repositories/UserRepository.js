@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const Product = require("../entities/Product");
 const User = require("../entities/User");
 
-class UserModel {
+class UserRepository {
   constructor(nome, email, password) {
     this.nome = nome;
     this.email = email;
@@ -138,4 +138,4 @@ class UserModel {
   }
 }
 
-module.exports = UserModel;
+module.exports = UserRepository;

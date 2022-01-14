@@ -1,17 +1,17 @@
-const UserModel = require("../../model/repositories/UserRepository");
+const UserRepository = require("../../model/repositories/UserRepository");
 const ApiError = require("../../utils/apiError");
 
 class DeleteUserService {
-  constructor(UserModel) {
-    this.userModel = new UserModel();
+  constructor(UserRepository) {
+    this.userRepository = new UserRepository();
   }
   async execute(id) {
-    let checkUserExists = await this.userModel.findById(id);
+    let checkUserExists = await this.userRepository.findById(id);
     if (!checkUserExists) {
       throw new ApiError(404, "usuário não encontrado");
     }
 
-    await this.userModel.deleteById(id);
+    await this.userRepository.deleteById(id);
   }
 }
 

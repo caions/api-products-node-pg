@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const Product = require("../entities/Product");
 const User = require("../entities/User");
 
-class ProductModel {
+class ProductRepository {
   constructor(nome, preco) {
     this.nome = nome;
     this.preco = preco;
@@ -88,4 +88,4 @@ class ProductModel {
   }
 }
 
-module.exports = ProductModel;
+module.exports = ProductRepository;

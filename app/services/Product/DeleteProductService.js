@@ -1,17 +1,17 @@
 const ApiError = require("../../utils/apiError");
 
 class DeleteProductService {
-  constructor(ProductModel) {
-    this.productModel = new ProductModel();
+  constructor(ProductRepository) {
+    this.productRepository = new ProductRepository();
   }
 
   async execute(id) {
-    let checkProductExists = await this.productModel.findById(id);
+    let checkProductExists = await this.productRepository.findById(id);
     if (!checkProductExists) {
       throw new ApiError(404, "Produto não encontrado");
     }
 
-    await this.productModel.deleteById(id);
+    await this.productRepository.deleteById(id);
   }
 }
 

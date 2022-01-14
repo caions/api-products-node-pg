@@ -1,6 +1,6 @@
 const ApiError = require("../utils/apiError");
-const UserModel = require("../model/repositories/UserRepository");
-const ProductModel = require("../model/repositories/ProductRepository");
+const UserRepository = require("../model/repositories/UserRepository");
+const ProductRepository = require("../model/repositories/ProductRepository");
 const ListUserService = require("../services/User/ListUserService");
 const ShowUserService = require("../services/User/ShowUserService");
 const CreateUserService = require("../services/User/CreateUserService");
@@ -24,8 +24,8 @@ class User {
       filter.email = email;
     }
 
-    const userModel = new ListUserService(UserModel);
-    let user = await userModel.execute(filter);
+    const userRepository = new ListUserService(UserRepository);
+    let user = await userRepository.execute(filter);
 
     res.json(user);
   }
@@ -33,7 +33,7 @@ class User {
   async show(req, res) {
     const { id } = req.params;
 
-    const showUserService = new ShowUserService(UserModel);
+    const showUserService = new ShowUserService(UserRepository);
     const user = await showUserService.execute(id);
 
     res.json(user);
@@ -54,7 +54,7 @@ class User {
       throw new ApiError(400, "Informe o password do usuário");
     }
 
-    const createUserService = new CreateUserService(UserModel);
+    const createUserService = new CreateUserService(UserRepository);
     const user = await createUserService.execute(nome, email, password);
 
     res.status(201).json(user);
@@ -64,7 +64,7 @@ class User {
     let { nome, password } = req.body;
     let { id } = req.params;
 
-    const updateUserService = new UpdateUserService(UserModel);
+    const updateUserService = new UpdateUserService(UserRepository);
     const updateUser = await updateUserService.execute(id, nome, password);
 
     res.json(updateUser);
@@ -73,7 +73,7 @@ class User {
   async destroy(req, res) {
     let { id } = req.params;
 
-    const deleteUserService = new DeleteUserService(UserModel);
+    const deleteUserService = new DeleteUserService(UserRepository);
     await deleteUserService.execute(id);
 
     res.json();
@@ -83,8 +83,8 @@ class User {
     const { userId, productId } = req.body;
 
     const addProductUserService = new AddProductUserService(
-      UserModel,
-      ProductModel
+      UserRepository,
+      ProductRepository
     );
     const result = await addProductUserService.execute(userId, productId);
 
@@ -95,8 +95,8 @@ class User {
     const { userId, productId } = req.body;
 
     const removeProductUserService = new RemoveProductUserService(
-      UserModel,
-      ProductModel
+      UserRepository,
+      ProductRepository
     );
     const result = await removeProductUserService.execute(userId, productId);
     res.json(result);
@@ -104,7 +104,7 @@ class User {
 
   async login(req, res) {
     const { email, password } = req.body;
-    const loginUserService = new LoginUserService(UserModel);
+    const loginUserService = new LoginUserService(UserRepository);
     const token = await loginUserService.execute(email, password);
 
     res.status(200).json({ token });
@@ -125,7 +125,7 @@ class User {
       throw new ApiError(400, "Informe o password do usuário");
     }
 
-    const registerUserService = new RegisterUserService(UserModel);
+    const registerUserService = new RegisterUserService(UserRepository);
     const user = await registerUserService.execute(nome, email, password);
 
     res.status(201).json(user);
