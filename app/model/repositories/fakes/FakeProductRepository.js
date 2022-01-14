@@ -1,7 +1,19 @@
 class FakeProductRepository {
   #products = []; // banco de dados onde serão armazenados os produtos
 
-  filter() {
+  filter({ nome, preco }) {
+    if (nome) {
+      const regexNome = new RegExp(nome);
+      return this.#products.filter((product) => product.nome.match(regexNome));
+    }
+
+    if (preco) {
+      const regexPreco = new RegExp(preco);
+      return this.#products.filter((product) =>
+        product.preco.toString().match(regexPreco)
+      );
+    }
+
     return this.#products;
   }
   // TODO refactor create function
