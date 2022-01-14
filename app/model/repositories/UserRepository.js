@@ -3,14 +3,6 @@ const Product = require("../entities/Product");
 const User = require("../entities/User");
 
 class UserRepository {
-  constructor(nome, email, password) {
-    this.nome = nome;
-    this.email = email;
-    this.password = password;
-    this.created_at;
-    this.updated_at;
-  }
-
   async filter({ nome, email }) {
     let options = {};
 
