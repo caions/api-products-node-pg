@@ -3,7 +3,8 @@ const Product = require("../entities/Product");
 const User = require("../entities/User");
 
 class ProductRepository {
-  async filter({ nome, preco }) {
+  async filter(product) {
+    const { nome, preco } = product;
     let options = {};
 
     if (nome) {
@@ -58,7 +59,7 @@ class ProductRepository {
       throw new Error();
     }
   }
-
+  // TODO refactor unecessary desestruct
   async save(product) {
     let { nome, preco, id } = product;
     try {

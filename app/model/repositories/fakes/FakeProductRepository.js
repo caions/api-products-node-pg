@@ -1,7 +1,8 @@
 class FakeProductRepository {
   #products = []; // banco de dados onde serão armazenados os produtos
 
-  filter({ nome, preco }) {
+  filter(product) {
+    const { nome, preco } = product;
     if (nome) {
       const regexNome = new RegExp(nome);
       return this.#products.filter((product) => product.nome.match(regexNome));
@@ -37,6 +38,14 @@ class FakeProductRepository {
     );
 
     return product;
+  }
+
+  async save(product) {
+    const { nome, preco, id } = product;
+    const findedProduct = this.#products.find((product) => product.id === id);
+    findedProduct.nome = nome;
+    findedProduct.preco = preco;
+    return { id, nome, preco };
   }
 
   deleteById(id) {
