@@ -8,7 +8,7 @@ const createProductService = new CreateProductService(FakeProductRepository);
 const deleteProductService = new DeleteProductService(FakeProductRepository);
 const showProductService = new ShowProductService(FakeProductRepository);
 
-describe("Delete products", () => {
+describe("Show products", () => {
   beforeAll(async () => {
     await createProductService.execute("boneca", 14.5);
     await createProductService.execute("boneca2", 14.9);
