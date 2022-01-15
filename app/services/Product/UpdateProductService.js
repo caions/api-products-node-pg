@@ -7,7 +7,7 @@ class UpdateProductService {
 
   async execute(id, nome, preco) {
     let checkProductExists = await this.productRepository.findById(id);
-
+    const product = { id, nome, preco };
     if (!checkProductExists) {
       throw new ApiError(404, "Produto não encontrado");
     }
@@ -19,9 +19,9 @@ class UpdateProductService {
       throw new ApiError(400, "Esse nome de produto está indisponível");
     }
 
-    await this.productRepository.save({ id, nome, preco });
+    await this.productRepository.save(product);
 
-    return { id, nome, preco };
+    return product;
   }
 }
 
