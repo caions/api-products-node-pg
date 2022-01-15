@@ -21,9 +21,9 @@ describe("Delete products", () => {
     expect(products).toHaveProperty("id", 1);
   });
 
-  /*  test("shouldn't be possible to remove a product without providing an id", async () => {
-    await expect(deleteProductService.execute()).rejects.toBeInstanceOf(
+  test("shouldn't be possible to get a nonexistent product", async () => {
+    await expect(showProductService.execute(4)).rejects.toBeInstanceOf(
       ApiError
     );
-  }); */
+  });
 });
